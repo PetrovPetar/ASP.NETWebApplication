@@ -1,0 +1,59 @@
+﻿@model IEnumerable<WebApplication.Models.Comment>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+@foreach (var comment in Model)
+{
+    <h2>@Html.DisplayFor(modelItem => comment.Post.Title)</h2>
+    <p>Автор: @Html.DisplayFor(modelItem => comment.Author.UserName)</p><br />
+    <p>Съдържание: </p>@Html.DisplayFor(modelItem => comment.Post.Body)
+
+    <div class="form-group">
+        <div class="col-md-offset-2 col-md-10">
+            <h3>Коментар</h3> 
+            @Html.TextAreaFor(model => comment.Text, new { @class = "whatever-class", @cols = 80, @rows = 10 })
+            <input type="submit" value="Изпрати" class="btn btn-default" />
+        </div>
+    </div>
+
+    <table class="table">
+        <tr>
+            <th>
+                Автор
+            </th>
+            <th>
+                Коментар
+            </th>
+            <th>
+                Дата
+            </th>
+            <th></th>
+        </tr>
+
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Author.UserName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Text)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Date)
+                </td>
+                <td>
+                    @Html.ActionLink("Edit", "Edit", new { id = item.Id }) |
+                    @Html.ActionLink("Details", "Details", new { id = item.Id }) |
+                    @Html.ActionLink("Delete", "Delete", new { id = item.Id })
+                </td>
+            </tr>
+        }
+
+    </table>
+
+}
+
+

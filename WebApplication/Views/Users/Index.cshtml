@@ -1,0 +1,28 @@
+﻿@model List<WebApplication.Models.ApplicationUser>
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Index</h2>
+
+<table class="users">
+    <tr>
+        <th>Име</th>
+        <th>Ел.поща</th>
+    </tr>
+    @foreach (var user in Model)
+    {
+        <tr>
+            @if (user.FullName != null)
+            {
+                <td>@user.FullName</td>
+            }
+            else
+            { 
+                <td>Без име</td>
+            }
+            
+            <td>@user.UserName</td>
+        </tr>
+    }
+</table>

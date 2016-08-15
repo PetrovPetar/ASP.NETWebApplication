@@ -1,0 +1,76 @@
+﻿@model IEnumerable<WebApplication.Models.Post>
+
+@{
+    ViewBag.Title = "Index";
+    
+}
+
+<h2>Index</h2>
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+<table class="table">
+    <tr>
+        <th>
+           Заглавие
+        </th>
+        <th>
+           Съдържание
+        </th>
+        <th>
+           Автор
+        </th>
+        <th>
+           Дата
+        </th>
+        <th>
+            Коментари
+        </th>
+        <th>
+            Действия
+        </th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>@Html.ActionLink(item.Title, "Details",
+            "Posts", new { id = item.Id }, null)
+           
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Body)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Author.UserName)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Date)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.CommentsCount)
+        </td>
+        <td>
+            
+            @if (Roles.IsUserInRole(User.Identity.Name, "Admin"))
+            {
+                @Html.ActionLink("Edit", "Edit", new { id = item.Id })
+                <br />
+                @Html.ActionLink("Delete", "Delete", new { id = item.Id })
+                <br />
+            }
+            @if (!Roles.IsUserInRole(User.Identity.Name, "Admin") && 
+                User.Identity.Name == item.Author.UserName)
+            {
+                @Html.ActionLink("Edit", "Edit", new { id = item.Id })
+                <br />
+                @Html.ActionLink("Delete", "Delete", new { id = item.Id })
+                <br />
+            }
+            
+           
+        </td>
+    </tr>
+}
+
+</table>

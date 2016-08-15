@@ -1,0 +1,31 @@
+﻿@{
+    ViewBag.Title = "Home Page";
+}
+@model List<WebApplication.Models.Post>
+<aside>
+    <div class="left-posts col-md-4">
+        <h2 class="recent-posts">Последни постове</h2>
+        @foreach (var post in Model.OrderByDescending(p => p.Comments.Count()).Take(5))
+        {
+            <h3 class="title">@Html.ActionLink(post.Title, "Details",
+                                "Posts", new {id = post.Id}, null)</h3>
+        }
+      
+    </div>
+</aside>
+
+<article class="col-md-8">
+    @foreach (var post in Model.OrderByDescending(p => p.Date).Take(4))
+    {
+        <h2 class="title">@post.Title</h2>
+        <i>Публикувано от </i><span>@post.Author.UserName</span><i> на </i><span>@post.Date</span><br />
+        <div class="content">
+           @post.Body
+        </div>
+        <p class="btn btn-default">
+            @Html.ActionLink("Прочети повече...", "Details",
+            "Posts", new { id = post.Id }, null)
+        </p>
+    }
+  
+</article>
