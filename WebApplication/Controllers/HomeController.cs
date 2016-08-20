@@ -13,6 +13,8 @@ namespace WebApplication.Controllers
         private ApplicationDbContext db = new ApplicationDbContext();
         public ActionResult Index()
         {
+           
+            ViewBag.Tags = db.Tags.ToList();
             var posts = db.Posts.Include(p => p.Author)
                 .OrderByDescending(p => p.Date).Take(5);
             return View(posts.ToList());

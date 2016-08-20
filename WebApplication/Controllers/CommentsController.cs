@@ -36,7 +36,7 @@ namespace WebApplication.Controllers
             return View(comment);
         }
 
-        // GET: Comments/Create
+        [Authorize]
         public ActionResult Create()
         {
             ViewBag.Author_Id = new SelectList(db.Users, "Id", "FullName");
@@ -49,6 +49,7 @@ namespace WebApplication.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize]
         public ActionResult Create([Bind(Include = "Id,Text")] Comment comment,int? id)
         {
             if (ModelState.IsValid)

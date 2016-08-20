@@ -17,6 +17,7 @@ namespace WebApplication.Controllers
         // GET: Posts
         public ActionResult Index()
         {
+          
             var postsWithAuthors = db.Posts.
                 Include(p => p.Author).ToList(); 
             return View(postsWithAuthors.OrderByDescending(p => p.Date).ToList());
@@ -41,6 +42,7 @@ namespace WebApplication.Controllers
         // GET: Posts/Create
         public ActionResult Create()
         {
+
             return View();
         }
 
@@ -84,6 +86,7 @@ namespace WebApplication.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+
         public ActionResult Edit([Bind(Include = "Id,Title,Body,Author_Id")] Post post)
         {
             if (ModelState.IsValid)
