@@ -38,5 +38,6 @@ namespace WebApplication.Models
         public virtual int CommentsCount { get; set; }
 
         public ICollection<Tag> Tags { get; set; }
+
     }
 }
