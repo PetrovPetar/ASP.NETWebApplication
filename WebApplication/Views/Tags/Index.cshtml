@@ -14,6 +14,9 @@
         <th>
             @Html.DisplayNameFor(model => model.Name)
         </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Posts)
+        </th>
         <th></th>
     </tr>
 
@@ -21,6 +24,14 @@
     <tr>
         <td>
             @Html.DisplayFor(modelItem => item.Name)
+        </td>
+        <td>
+           
+
+            @foreach (var post in item.Posts)
+            {
+                @post.Title<br />
+            }
         </td>
         <td>
             @Html.ActionLink("Edit", "Edit", new { id=item.Id }) |
