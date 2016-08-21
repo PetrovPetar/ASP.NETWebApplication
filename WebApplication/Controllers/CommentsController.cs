@@ -93,17 +93,20 @@ namespace WebApplication.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "Id,Text,Author_Id,Post_Id")] Comment comment)
+        [ValidateInput(false)]
+        public ActionResult Edit(Comment newComment, string Text, string postId, int? id)
         {
             if (ModelState.IsValid)
             {
-                db.Entry(comment).State = EntityState.Modified;
+                var oldComment = db.Comments.Find(id);
+                newComment = oldComment;
+                newComment.Text = Text;
+                db.Entry(newComment).State = EntityState.Modified;
                 db.SaveChanges();
-                return RedirectToAction("Index");
+                return RedirectToAction("../Posts/Details/"+ postId);
             }
-            ViewBag.Author_Id = new SelectList(db.Users, "Id", "FullName", comment.Author_Id);
-            ViewBag.Post_Id = new SelectList(db.Posts, "Id", "Title", comment.Post_Id);
-            return View(comment);
+            
+            return View(newComment);
         }
 
         // GET: Comments/Delete/5

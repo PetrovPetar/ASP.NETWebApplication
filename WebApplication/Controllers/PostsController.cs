@@ -86,14 +86,15 @@ namespace WebApplication.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-
-        public ActionResult Edit([Bind(Include = "Id,Title,Body,Author_Id")] Post post)
+        [ValidateInput(false)]
+        public ActionResult Edit( Post post, string Title, string Body, int? id)
         {
             if (ModelState.IsValid)
             {
-                post.Author = db.Users.FirstOrDefault(u => u.UserName == User.Identity.Name);
-                post.Date = DateTime.Now;
-                //db.Entry(post).State = EntityState.Modified;
+                post = db.Posts.Find(id);
+                post.Title = Title;
+                post.Body = Body;
+                db.Entry(post).State = EntityState.Modified;
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
