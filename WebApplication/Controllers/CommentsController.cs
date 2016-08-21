@@ -12,6 +12,7 @@ namespace WebApplication.Controllers
 {
     public class CommentsController : Controller
     {
+        
         private ApplicationDbContext db = new ApplicationDbContext();
 
         // GET: Comments
@@ -112,6 +113,7 @@ namespace WebApplication.Controllers
         // GET: Comments/Delete/5
         public ActionResult Delete(int? id)
         {
+            
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
@@ -129,10 +131,12 @@ namespace WebApplication.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {
+            
             Comment comment = db.Comments.Find(id);
+            var postId = comment.Post.Id;
             db.Comments.Remove(comment);
             db.SaveChanges();
-            return RedirectToAction("Index");
+            return RedirectToAction("../Posts/Details/" + postId);
         }
 
         protected override void Dispose(bool disposing)
