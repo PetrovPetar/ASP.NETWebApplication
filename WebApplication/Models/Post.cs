@@ -12,6 +12,7 @@ namespace WebApplication.Models
         public Post()
         {
             this.Comments = new HashSet<Comment>();
+            this.Tags = new HashSet<Tag>();
             this.Date = DateTime.Now;
             
         }
@@ -37,7 +38,8 @@ namespace WebApplication.Models
 
         public virtual int CommentsCount { get; set; }
 
-        public ICollection<Tag> Tags { get; set; }
+        public virtual ICollection<Tag> Tags { get; set; }
+
 
     }
 }
