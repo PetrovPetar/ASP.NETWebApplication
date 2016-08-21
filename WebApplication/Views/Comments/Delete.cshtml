@@ -2,6 +2,7 @@
 
 @{
     ViewBag.Title = "Delete";
+   
 }
 
 <h2>Delete</h2>
@@ -28,15 +29,15 @@
         </dd>
 
         <dt>
-            @Html.DisplayNameFor(model => model.Body)
+            @Html.DisplayNameFor(model => model.Text)
         </dt>
 
         <dd>
-            @Html.DisplayFor(model => model.Body)
+            @Html.DisplayFor(model => model.Text)
         </dd>
 
     </dl>
-
+    
     @using (Html.BeginForm()) {
         @Html.AntiForgeryToken()
 
