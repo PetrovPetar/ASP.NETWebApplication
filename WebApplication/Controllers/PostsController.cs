@@ -122,6 +122,15 @@ namespace WebApplication.Controllers
         public ActionResult DeleteConfirmed(int id)
         {
             Post post = db.Posts.Find(id);
+            foreach (Comment comment in post.Comments.ToList())
+            {
+                db.Comments.Remove(comment);
+            }
+            foreach (var tag in post.Tags)
+            {
+                var tagId = tag.Id;
+                db.Tags.Find(tagId).Posts.Remove(post);
+            }
             db.Posts.Remove(post);
             db.SaveChanges();
             return RedirectToAction("Index");

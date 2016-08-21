@@ -128,7 +128,13 @@ namespace WebApplication.Controllers
       
         public ActionResult DeleteConfirmed(int id)
         {
+            
             Tag tag = db.Tags.Find(id);
+            foreach (var post in tag.Posts.ToList())
+            {
+                var postId = post.Id;
+                db.Posts.Find(postId).Tags.Remove(tag);
+            }
             db.Tags.Remove(tag);
             db.SaveChanges();
             return RedirectToAction("Index");
