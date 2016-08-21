@@ -134,6 +134,8 @@ namespace WebApplication.Controllers
             
             Comment comment = db.Comments.Find(id);
             var postId = comment.Post.Id;
+            db.Posts.Find(postId).CommentsCount--;
+            db.Posts.Find(postId).Comments.Remove(comment);
             db.Comments.Remove(comment);
             db.SaveChanges();
             return RedirectToAction("../Posts/Details/" + postId);
