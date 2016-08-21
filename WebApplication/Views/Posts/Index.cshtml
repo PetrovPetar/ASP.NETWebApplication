@@ -36,16 +36,16 @@
            
         </td>
         <td>
-            @Html.DisplayFor(modelItem => item.Body)
+            @Html.Raw(item.Body)
         </td>
         <td>
-            @Html.DisplayFor(modelItem => item.Author.UserName)
+            @Html.Raw(item.Author.UserName)
         </td>
         <td>
-            @Html.DisplayFor(modelItem => item.Date)
+            @Html.Raw(item.Date)
         </td>
         <td>
-            @Html.DisplayFor(modelItem => item.CommentsCount)
+            @Html.Raw(item.CommentsCount)
         </td>
         <td>
             
