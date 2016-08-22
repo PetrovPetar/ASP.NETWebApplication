@@ -59,6 +59,7 @@
         <th class="col-md-2">Автор</th>
         <th class="col-md-8">Коментар</th>
         <th class="col-md-2">Дата</th>
+        <th class="col-md-2">Прикачен файл</th>
         <th class="col-md-2">Действия</th>
     </tr>
     @foreach (var comment in Model.Comments)
@@ -69,6 +70,14 @@
                 <td>@comment.Author.UserName</td>
                 <td>@Html.Raw(comment.Text)</td>
                 <td>@comment.Date</td>
+                @if (comment.FileName != null)
+                {
+                    <td>@Html.ActionLink("Download", "Download", "Comments", new { ImageName = comment.FileName }, null)</td>
+                }
+                else
+                {
+                    <td></td>
+                }
 
                 @if (comment.Author.UserName == User.Identity.Name)
                 {
