@@ -31,5 +31,7 @@ namespace WebApplication.Models
 
         [ForeignKey("Post_Id")]
         public virtual Post Post { get; set; }
+
+        public virtual string FileName { get; set; }
     }
 }
