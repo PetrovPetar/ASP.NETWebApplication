@@ -32,7 +32,7 @@ namespace WebApplication.Models
         public string Author_Id { get; set; }
         
         [ForeignKey("Author_Id")]
-        public ApplicationUser Author { get; set; }
+        public virtual ApplicationUser Author { get; set; }
         
         public virtual ICollection<Comment> Comments  { get; set; }
 
