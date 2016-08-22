@@ -1,17 +1,26 @@
 ﻿@{
     ViewBag.Title = "Home Page";
+    List<WebApplication.Models.Tag> tags = ViewBag.Tags;
+    List<WebApplication.Models.Category> categories = ViewBag.Categories;
 }
 @model List<WebApplication.Models.Post>
 <aside>
-    <div class="left-posts col-md-4">
-        <h2 class="recent-posts">Последни постове</h2>
-        @foreach (var post in Model.OrderByDescending(p => p.Comments.Count()).Take(5))
+    <div class="tags col-md-4">
+        <h2 class="recent-posts">Популярни тагове</h2>
+        @foreach (var tag in tags.OrderByDescending(t => t.Posts.Count()).Take(5))
         {
-            <h3 class="title">@Html.ActionLink(post.Title, "Details",
-                                "Posts", new {id = post.Id}, null)</h3>
+            <h3 class="title">@Html.ActionLink(tag.Name, "Details",
+                                "Tags", new {id = tag.Id}, null)</h3>
         }
-      
-    </div>
+        <h2 class="recent-posts">Категории</h2>
+        @foreach (var category in categories)
+        {
+            <h3 class="title">
+                @Html.ActionLink(category.Name, "Details",
+                                "Categories", new { id = category.Id }, null)
+            </h3>
+        }
+   </div>
 </aside>
 
 <article class="col-md-8">
