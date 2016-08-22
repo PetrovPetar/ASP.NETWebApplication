@@ -42,7 +42,8 @@ namespace WebApplication.Controllers
         // GET: Posts/Create
         public ActionResult Create()
         {
-
+            ViewBag.Tags = db.Tags.ToList();
+            ViewBag.Categories = db.Categories.ToList();
             return View();
         }
 
@@ -51,13 +52,28 @@ namespace WebApplication.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "Id,Title,Body,Date,Author_Id")] Post post)
+        [ValidateInput(false)]
+        public ActionResult Create([Bind(Include = "Id,Title,Body,Date,Author_Id")] Post post,
+            string category,  string [] tags)
         {
             if (ModelState.IsValid)
             {
                 post.Author = db.Users.FirstOrDefault(u => u.UserName == User.Identity.Name);
                 post.CommentsCount = 0;
                 post.Date = DateTime.Now;
+
+                foreach (var tagId in tags)
+                {
+                    var id = Convert.ToInt32(tagId);
+                    var tag = db.Tags.Find(id);
+                    post.Tags.Add(tag);
+                    db.Tags.Find(id).Posts.Add(post);
+                }
+                var categoryId = Convert.ToInt32(category);
+                var postCategory = db.Categories.Find(categoryId);
+                post.Category = postCategory;
+                
+                db.Categories.Find(categoryId).Posts.Add(post);
                 db.Posts.Add(post);
                 db.SaveChanges();
                 return RedirectToAction("Index");
