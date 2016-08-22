@@ -20,6 +20,5 @@ namespace WebApplication.Controllers
             return View(posts.ToList());
         }
 
-      
     }
 }
