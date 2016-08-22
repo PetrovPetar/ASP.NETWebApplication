@@ -40,6 +40,6 @@ namespace WebApplication.Models
 
         public virtual ICollection<Tag> Tags { get; set; }
 
-
+        public  Category Category { get; set; }
     }
 }
