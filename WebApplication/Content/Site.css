@@ -1,6 +1,7 @@
 ﻿body {
     padding-top: 50px;
     padding-bottom: 20px;
+    background:#fefefe;
 }
 
 /* Set padding to keep content from hitting the edges */
@@ -14,6 +15,7 @@
 */
 .dl-horizontal dt {
     white-space: normal;
+
 }
 
 /* Set width on the form input elements since they're 100% wide by default */
@@ -22,25 +24,26 @@ select,
 textarea {
     max-width: 280px;
 }
-table.users {
-    width:80%;
-    background-color:aquamarine;
+.users {
+    text-align:left;
+    background:#EEE;
 }
-table.users>td,table.users>th {
-   margin:1px;
 
-}
+
+
 table.authors-comments{
-    background-color:aquamarine;
+    background:#EEE;
 }
 table, th, td{
     border:1px solid ;
+    border:thin;
 }
 .left-posts {
-    text-align:center;
-    background-color: mediumspringgreen;
+    text-align:justify;
+    background-color: #EEE;
     height:80%;
     border-radius:10px;
+    
 }
 .left-posts>h2>a:hover,
 .left-posts>h3>a:hover{
@@ -49,13 +52,16 @@ table, th, td{
 }
 .left-posts>h2>a, .left-posts>h3>a {
     text-decoration:none;
-     color:white;
+     color:black;
 }
 .form-horizontal .control-label{
     font-weight:700;
 }
 .btn-default{
-    font-weight:700;
+    font-weight:100;
+    float:right;
+
+
 }
 .button {
   margin:0 auto;
@@ -70,4 +76,12 @@ table, th, td{
   color: #000;
   font-weight: bold;
   text-decoration:none;
+}
+
+.img {
+    width: 50px;
+    height: 45px;
+    position: fixed;
+    margin-top: 3px;
+    
 }
