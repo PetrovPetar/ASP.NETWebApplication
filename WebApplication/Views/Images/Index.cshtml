@@ -1,0 +1,53 @@
+﻿@model IEnumerable<WebApplication.Models.Image>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Index</h2>
+
+@using (Html.BeginForm("Create", "Images", FormMethod.Post, new { enctype = "multipart/form-data" }))
+{
+    @Html.AntiForgeryToken()
+    <div class="img-upload">
+        <h2>Качи снимка</h2>
+        <input type="file" id="file" name="file" />
+        <input type="submit" value="Качи" />
+    </div>
+   
+}
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.Name)
+        </th>
+        
+        <th></th>
+    </tr>
+
+@foreach (var image in Model) {
+    <tr>
+        <td>
+            @Html.ActionLink(image.Name, "Download", "Images", new { ImageName = image.Name }, null)
+        </td>
+        <td>
+            @{
+                var path = "~/Gallery/" + image.Name;
+                <img src="@Url.Content(path)" alt="Image" width="300" />
+            }
+       
+        </td>
+        <td>
+            @if (Roles.IsUserInRole("Admin"))
+            {
+                @Html.ActionLink("Edit", "Edit", new { id = image.Id }) 
+                <br />
+                @Html.ActionLink("Details", "Details", new { id = image.Id })
+                <br />
+                @Html.ActionLink("Delete", "Delete", new { id = image.Id })
+            }
+        </td>
+    </tr>
+}
+
+</table>

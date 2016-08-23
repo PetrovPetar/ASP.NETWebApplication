@@ -10,6 +10,8 @@
 </head>
 <body>
     <div class="navbar navbar-inverse navbar-fixed-top">
+        <img class="img" src="~/Img/monkey-clipart-black-and-white-16981-monkey-face-svg.png" />
+
         <div class="container">
             <div class="navbar-header">
                 <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
@@ -17,7 +19,7 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                @Html.ActionLink("Блог", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
+                @Html.ActionLink("Mighty Monkeys Blog", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
             </div>
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
@@ -27,7 +29,14 @@
                     {
                         <li>@Html.ActionLink("Нова статия", "Create", "Posts")</li>
                     }
+                    @if (Roles.IsUserInRole("Admin"))
+                    {
+                        <li>@Html.ActionLink("Тагове", "Index", "Tags")</li>
+                        <li>@Html.ActionLink("Нов таг", "Create", "Tags")</li>
+                    }
                     <li>@Html.ActionLink("Потребители", "Index", "Users")</li>
+                    <li>@Html.ActionLink("Галерия", "Index", "Images")</li>
+                   
                 </ul>
                 @Html.Partial("_LoginPartial")
             </div>
@@ -37,7 +46,7 @@
         @RenderBody()
         <hr />
         <footer>
-            <p>&copy; @DateTime.Now.Year - Моят блог</p>
+            <p>&copy; @DateTime.Now.Year - Created By Mighty Monkeys</p>
         </footer>
     </div>
 

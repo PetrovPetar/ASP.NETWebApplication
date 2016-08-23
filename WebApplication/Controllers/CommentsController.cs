@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Data.Entity;
+using System.IO;
 using System.Linq;
 using System.Net;
 using System.Web;
@@ -12,6 +13,7 @@ namespace WebApplication.Controllers
 {
     public class CommentsController : Controller
     {
+        
         private ApplicationDbContext db = new ApplicationDbContext();
 
         // GET: Comments
@@ -36,7 +38,7 @@ namespace WebApplication.Controllers
             return View(comment);
         }
 
-        // GET: Comments/Create
+        [Authorize]
         public ActionResult Create()
         {
             ViewBag.Author_Id = new SelectList(db.Users, "Id", "FullName");
@@ -49,11 +51,29 @@ namespace WebApplication.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "Id,Text")] Comment comment,int? id)
+        [Authorize]
+        public ActionResult Create([Bind(Include = "Id,Text")] Comment comment,int? id, HttpPostedFileBase file)
         {
             if (ModelState.IsValid)
             {
-              
+                try
+                {
+                    if (file.ContentLength > 0)
+                    {
+                        var fileName = Path.GetFileName(file.FileName);
+                        var path = Path.Combine(Server.MapPath("~/Files/"), fileName);
+                        file.SaveAs(path);
+                        comment.FileName = fileName;
+                    }
+                    ViewBag.Message = "Upload successful";
+                   
+                }
+                catch
+                {
+                    ViewBag.Message = "Upload failed";
+                   
+                }
+
                 Post post = db.Posts.Find(id);
                 comment.Author = db.Users.FirstOrDefault(u => u.UserName == User.Identity.Name);
                 comment.Post = post;
@@ -92,22 +112,26 @@ namespace WebApplication.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "Id,Text,Author_Id,Post_Id")] Comment comment)
+        [ValidateInput(false)]
+        public ActionResult Edit(Comment newComment, string Text, string postId, int? id)
         {
             if (ModelState.IsValid)
             {
-                db.Entry(comment).State = EntityState.Modified;
+                var oldComment = db.Comments.Find(id);
+                newComment = oldComment;
+                newComment.Text = Text;
+                db.Entry(newComment).State = EntityState.Modified;
                 db.SaveChanges();
-                return RedirectToAction("Index");
+                return RedirectToAction("../Posts/Details/"+ postId);
             }
-            ViewBag.Author_Id = new SelectList(db.Users, "Id", "FullName", comment.Author_Id);
-            ViewBag.Post_Id = new SelectList(db.Posts, "Id", "Title", comment.Post_Id);
-            return View(comment);
+            
+            return View(newComment);
         }
 
         // GET: Comments/Delete/5
         public ActionResult Delete(int? id)
         {
+            
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
@@ -125,12 +149,21 @@ namespace WebApplication.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {
+            
             Comment comment = db.Comments.Find(id);
+            var postId = comment.Post.Id;
+            db.Posts.Find(postId).CommentsCount--;
+            db.Posts.Find(postId).Comments.Remove(comment);
             db.Comments.Remove(comment);
             db.SaveChanges();
-            return RedirectToAction("Index");
+            return RedirectToAction("../Posts/Details/" + postId);
         }
+    
+        public FileResult Download(string ImageName)
+        {
+            return File("~/Files/" + ImageName, System.Net.Mime.MediaTypeNames.Application.Octet);
 
+        }
         protected override void Dispose(bool disposing)
         {
             if (disposing)

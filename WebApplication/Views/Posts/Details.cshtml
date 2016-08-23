@@ -23,7 +23,7 @@
         </dt>
 
         <dd>
-            @Html.DisplayFor(model => model.Body)
+            @Html.Raw(Model.Body)
         </dd>
 
         <dt>
@@ -33,18 +33,43 @@
         <dd>
             @Html.DisplayFor(model => model.Date)
         </dd>
-
+        <dt>
+            Тагове
+        </dt>
+        <dd>
+            @foreach (var tag in Model.Tags)
+            {
+                <div class="tags">
+                    @Html.ActionLink(tag.Name, "Details",
+                    "Tags", new { id = tag.Id }, null)
+                    @Html.Raw(" ")
+                </div>
+            }
+        </dd>
+        @if(Model.FileName != null)
+        {
+            <dt>
+                Прикачен файл
+            </dt>
+            <dd>
+                @Html.ActionLink(Model.FileName, "Download", "Posts", new { ImageName = Model.FileName }, null)
+            </dd>
+        }
     </dl>
+   
     <div class="btn btn-default">
         @Html.ActionLink("Коментар", "Create",
         "Comments", new { id = Model.Id }, null)
     </div>
 </div>
+
 <table class="authors-comments col-md-12">
     <tr>
         <th class="col-md-2">Автор</th>
         <th class="col-md-8">Коментар</th>
         <th class="col-md-2">Дата</th>
+        <th class="col-md-2">Прикачен файл</th>
+        <th class="col-md-2">Действия</th>
     </tr>
     @foreach (var comment in Model.Comments)
     {
@@ -52,15 +77,39 @@
         {
             <tr>
                 <td>@comment.Author.UserName</td>
-                <td>@comment.Text</td>
+                <td>@Html.Raw(comment.Text)</td>
                 <td>@comment.Date</td>
+                @if (comment.FileName != null)
+                {
+                    <td>@Html.ActionLink(comment.FileName, "Download", "Comments", new { ImageName = comment.FileName }, null)</td>
+                }
+                else
+                {
+                    <td></td>
+                }
+
+                @if (comment.Author.UserName == User.Identity.Name)
+                {
+                    <td>
+                        @Html.ActionLink("Edit", "Edit",
+                                "Comments", new { id = comment.Id }, null)
+                        <br />
+                        @Html.ActionLink("Delete",  "Delete",
+                       "Comments", new { id = comment.Id }, null)
+                        <br />
+                    </td>
+                }
+                else
+                {
+                    <td></td>
+                }
             </tr>
         }
         else
         {
             <tr>
-                <td>Няма Автор!</td>
-                <td>@comment.Text</td>
+                <td>Няма Автор</td>
+                <td>@Html.Raw(comment.Text)</td>
                 <td>@comment.Date</td>
             </tr>
         }

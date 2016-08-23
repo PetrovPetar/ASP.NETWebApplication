@@ -6,6 +6,8 @@ using System.Linq;
 using System.Net;
 using System.Web;
 using System.Web.Mvc;
+using System.Web.UI;
+using System.Web.UI.HtmlControls;
 using WebApplication.Models;
 
 namespace WebApplication.Controllers
@@ -14,13 +16,16 @@ namespace WebApplication.Controllers
     {
         private ApplicationDbContext db = new ApplicationDbContext();
 
+       
         // GET: Tags
+        [Authorize(Roles = "Admin")]
         public ActionResult Index()
         {
             return View(db.Tags.ToList());
         }
 
         // GET: Tags/Details/5
+       
         public ActionResult Details(int? id)
         {
             if (id == null)
@@ -36,9 +41,11 @@ namespace WebApplication.Controllers
         }
 
         // GET: Tags/Create
-       
+        [Authorize(Roles = "Admin")]
         public ActionResult Create()
         {
+            
+            ViewBag.Posts = db.Posts;
             return View();
         }
 
@@ -48,11 +55,18 @@ namespace WebApplication.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize(Roles = "Admin")]
-        public ActionResult Create([Bind(Include = "Id,Name")] Tag tag)
+        public ActionResult Create([Bind(Include = "Id,Name")] Tag tag, string [] post)
         {
+          
             if (ModelState.IsValid)
             {
-                
+                foreach (var p in post)
+                {
+                    var id = Convert.ToInt32(p);
+                    tag.Posts.Add(db.Posts.Single(x => x.Id == id));
+                    
+                    db.Posts.Find(id).Tags.Add(tag);
+                }
                 db.Tags.Add(tag);
                 db.SaveChanges();
                 return RedirectToAction("Index");
@@ -116,7 +130,13 @@ namespace WebApplication.Controllers
         [Authorize(Roles = "Admin")]
         public ActionResult DeleteConfirmed(int id)
         {
+            
             Tag tag = db.Tags.Find(id);
+            foreach (var post in tag.Posts.ToList())
+            {
+                var postId = post.Id;
+                db.Posts.Find(postId).Tags.Remove(tag);
+            }
             db.Tags.Remove(tag);
             db.SaveChanges();
             return RedirectToAction("Index");
@@ -130,5 +150,6 @@ namespace WebApplication.Controllers
             }
             base.Dispose(disposing);
         }
+        
     }
 }

@@ -12,6 +12,7 @@ namespace WebApplication.Models
         public Post()
         {
             this.Comments = new HashSet<Comment>();
+            this.Tags = new HashSet<Tag>();
             this.Date = DateTime.Now;
             
         }
@@ -31,12 +32,16 @@ namespace WebApplication.Models
         public string Author_Id { get; set; }
         
         [ForeignKey("Author_Id")]
-        public ApplicationUser Author { get; set; }
+        public virtual ApplicationUser Author { get; set; }
         
         public virtual ICollection<Comment> Comments  { get; set; }
 
         public virtual int CommentsCount { get; set; }
 
-        public ICollection<Tag> Tags { get; set; }
+        public virtual ICollection<Tag> Tags { get; set; }
+
+        public  Category Category { get; set; }
+
+        public virtual string FileName { get; set; }
     }
 }

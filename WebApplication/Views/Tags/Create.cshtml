@@ -1,51 +1,70 @@
-﻿@model WebApplication.Models.PostTags
-
+﻿@model WebApplication.Models.Tag
 @{
     ViewBag.Title = "Create";
+    
 }
 
 <h2>Create</h2>
 
 
-@using (Html.BeginForm()) 
+@using (Html.BeginForm("Create", "Tags", FormMethod.Post))
 {
     @Html.AntiForgeryToken()
-    
+    {
+        
+        List<SelectListItem> listPosts =
+new List<SelectListItem>();
+        var allPosts = ViewBag.Posts;
+        List<int> tagPosts = new List<int>();
+        foreach (var post in allPosts)
+        {
+            listPosts.Add(new SelectListItem
+            {
+                Text = post.Title,
+                Value = Convert.ToString(post.Id)
+            });
+        }
+
+
     <div class="form-horizontal">
         <h4>Tag</h4>
         <hr />
         @Html.ValidationSummary(true, "", new { @class = "text-danger" })
         <div class="form-group">
-            @Html.LabelFor(model => model.Tag.Name, htmlAttributes: new { @class = "control-label col-md-2" })
+            @Html.LabelFor(model => model.Name, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                @Html.EditorFor(model => model.Tag.Name, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.Tag.Name, "", new { @class = "text-danger" })
+                @Html.EditorFor(model => model.Name, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Name, "", new { @class = "text-danger" })
             </div>
         </div>
         <div class="form-group">
-            @Html.LabelFor(model => model.Post.Tags, htmlAttributes: new { @class = "control-label col-md-2" })
+            @Html.LabelFor(model => model.Posts, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                @Html.DropDownList("posts", Model.Post.Id)
-                @Html.ValidationMessageFor(model => model.Posts, "", new { @class = "text-danger" })
+                  @foreach (var p in allPosts)
+                  {
+                    
+                    <input name="post" type="checkbox" id="@p.Id" class="chkclass" value="@p.Id" />
+                    @p.Title
+                      <br />
+                  }
             </div>
-            <div class="form-group">
+       </div>
+      
+       <ul name="addedPosts" id="addedPosts"></ul>
+
+             <div class="form-group">
                 <div class="col-md-offset-2 col-md-10">
-                    <input type="submit" value="Добави" class="btn btn-default" />
+                    <input type="submit" value="Create" id="CreateButton" name="CreateButton" class="btn btn-default" />
                 </div>
             </div>
         </div>
-        <div class="form-group">
-            <div class="col-md-offset-2 col-md-10">
-                <input type="submit" value="Create" class="btn btn-default" />
-            </div>
-        </div>
-    </div>
+    }
 }
-
 <div>
     @Html.ActionLink("Back to List", "Index")
 </div>
 
 @section Scripts {
     @Scripts.Render("~/bundles/jqueryval")
+    <script src="~/Scripts/button.actions.js"></script>
 }

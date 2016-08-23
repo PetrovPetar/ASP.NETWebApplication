@@ -4,6 +4,7 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Web;
+using System.Web.Mvc;
 
 namespace WebApplication.Models
 {
@@ -18,8 +19,8 @@ namespace WebApplication.Models
         public int Id { get; set; }
 
         [Required]
+        [UIHint("tinymce_full"), AllowHtml]
         public string Text { get; set; }
-
         
         public DateTime Date { get; set; }
         public string Author_Id { get; set; }
@@ -30,5 +31,7 @@ namespace WebApplication.Models
 
         [ForeignKey("Post_Id")]
         public virtual Post Post { get; set; }
+
+        public virtual string FileName { get; set; }
     }
 }
