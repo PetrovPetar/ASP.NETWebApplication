@@ -46,6 +46,15 @@
                 </div>
             }
         </dd>
+        @if(Model.FileName != null)
+        {
+            <dt>
+                Прикачен файл
+            </dt>
+            <dd>
+                @Html.ActionLink(Model.FileName, "Download", "Posts", new { ImageName = Model.FileName }, null)
+            </dd>
+        }
     </dl>
    
     <div class="btn btn-default">
@@ -72,7 +81,7 @@
                 <td>@comment.Date</td>
                 @if (comment.FileName != null)
                 {
-                    <td>@Html.ActionLink("Download", "Download", "Comments", new { ImageName = comment.FileName }, null)</td>
+                    <td>@Html.ActionLink(comment.FileName, "Download", "Comments", new { ImageName = comment.FileName }, null)</td>
                 }
                 else
                 {
