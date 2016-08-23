@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Data.Entity;
+using System.IO;
 using System.Linq;
 using System.Net;
 using System.Web;
@@ -54,10 +55,28 @@ namespace WebApplication.Controllers
         [ValidateAntiForgeryToken]
         [ValidateInput(false)]
         public ActionResult Create([Bind(Include = "Id,Title,Body,Date,Author_Id")] Post post,
-            string category,  string [] tags)
+            string category,  string [] tags, HttpPostedFileBase file)
         {
             if (ModelState.IsValid)
             {
+                try
+                {
+                    if (file.ContentLength > 0)
+                    {
+                        var fileName = Path.GetFileName(file.FileName);
+                        var path = Path.Combine(Server.MapPath("~/Files/"), fileName);
+                        file.SaveAs(path);
+                        post.FileName = fileName;
+                    }
+                    ViewBag.Message = "Upload successful";
+
+                }
+                catch
+                {
+                    ViewBag.Message = "Upload failed";
+
+                }
+
                 post.Author = db.Users.FirstOrDefault(u => u.UserName == User.Identity.Name);
                 post.CommentsCount = 0;
                 post.Date = DateTime.Now;
@@ -151,7 +170,11 @@ namespace WebApplication.Controllers
             db.SaveChanges();
             return RedirectToAction("Index");
         }
+        public FileResult Download(string ImageName)
+        {
+            return File("~/Files/" + ImageName, System.Net.Mime.MediaTypeNames.Application.Octet);
 
+        }
         protected override void Dispose(bool disposing)
         {
             if (disposing)
