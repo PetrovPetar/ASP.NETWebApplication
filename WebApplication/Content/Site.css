@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 ﻿body {
     padding-top: 50px;
     padding-bottom: 20px;
@@ -85,3 +86,92 @@ table, th, td{
     margin-top: 3px;
     
 }
+=======
+﻿body {
+    padding-top: 50px;
+    padding-bottom: 20px;
+    background:#fefefe;
+}
+
+/* Set padding to keep content from hitting the edges */
+.body-content {
+    padding-left: 15px;
+    padding-right: 15px;
+}
+
+/* Override the default bootstrap behavior where horizontal description lists 
+   will truncate terms that are too long to fit in the left column 
+*/
+.dl-horizontal dt {
+    white-space: normal;
+
+}
+
+/* Set width on the form input elements since they're 100% wide by default */
+input,
+select,
+textarea {
+    max-width: 280px;
+}
+.users {
+    text-align:left;
+    background:#EEE;
+}
+
+
+
+table.authors-comments{
+    background:#EEE;
+}
+table, th, td{
+    border:1px solid ;
+    border:thin;
+}
+.left-posts {
+    text-align:justify;
+    background-color: #EEE;
+    height:80%;
+    border-radius:10px;
+    
+}
+.left-posts>h2>a:hover,
+.left-posts>h3>a:hover{
+   
+    font-weight:bold;
+}
+.left-posts>h2>a, .left-posts>h3>a {
+    text-decoration:none;
+     color:black;
+}
+.form-horizontal .control-label{
+    font-weight:700;
+}
+.btn-default{
+    font-weight:100;
+    float:right;
+
+
+}
+.button {
+  margin:0 auto;
+  display: block;
+  height: 40px;
+  width:120px;
+  background: #f1f1f1;
+  padding: 10px;
+  text-align: center;
+  border-radius: 5px;
+  border: 1px solid #e1e1e2;
+  color: #000;
+  font-weight: bold;
+  text-decoration:none;
+}
+
+.img {
+    width: 50px;
+    height: 45px;
+    position: fixed;
+    margin-top: 3px;
+    
+}
+>>>>>>> d792e6801b2b6d3c9a4d9063835e002fabf139f1

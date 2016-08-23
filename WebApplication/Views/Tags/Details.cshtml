@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 ﻿@model WebApplication.Models.Tag
 
 @{
@@ -32,3 +33,39 @@
     @Html.ActionLink("Edit", "Edit", new { id = Model.Id }) |
     @Html.ActionLink("Back to List", "Index")
 </p>
+=======
+﻿@model WebApplication.Models.Tag
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<h2>@Model.Name</h2>
+
+
+<h2>Постове:</h2>
+<table>
+    <tr>
+        <th>Име на поста</th>
+        <th>Автор на поста</th>
+        <th>Съдържание</th>
+        <th>Коментари</th>
+        <th>Дата на публикуване</th>
+    </tr>
+    @foreach (var post in Model.Posts.OrderByDescending(p => p.Date))
+    {
+        <tr>
+            <td>@Html.ActionLink(post.Title, "Details",
+                                "Posts", new { id = post.Id }, null)</td>
+            <td>@post.Author.UserName</td>
+            <td>@Html.Raw(post.Body)</td>
+            <td>@post.Comments.Count()</td>
+            <td>@post.Date</td>
+        </tr>
+    }
+</table>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.Id }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>
+>>>>>>> d792e6801b2b6d3c9a4d9063835e002fabf139f1
