@@ -30,7 +30,7 @@
                     {
                         <li>@Html.ActionLink("Нова статия", "Create", "Posts")</li>
                     }
-                    @if (Roles.IsUserInRole("Admin"))
+                    @if (Roles.IsUserInRole(User.Identity.Name,"Admin"))
                     {
                         <li>@Html.ActionLink("Тагове", "Index", "Tags")</li>
                         <li>@Html.ActionLink("Нов таг", "Create", "Tags")</li>
