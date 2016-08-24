@@ -1,5 +1,5 @@
 
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.Entity;
@@ -51,7 +51,7 @@ namespace WebApplication.Controllers
         {
             if (ModelState.IsValid)
             {
-                
+
                 db.Categories.Add(category);
                 db.SaveChanges();
                 return RedirectToAction("Index");
@@ -117,7 +117,7 @@ namespace WebApplication.Controllers
             {
                 db.Posts.Find(post.Id).Category = categoryOther;
             }
-            
+
             db.Categories.Remove(category);
             db.SaveChanges();
             return RedirectToAction("Index");
