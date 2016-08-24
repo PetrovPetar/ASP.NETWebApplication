@@ -82,12 +82,15 @@ namespace WebApplication.Controllers
                 post.CommentsCount = 0;
                 post.Date = DateTime.Now;
 
-                foreach (var tagId in tags)
+                if(tags != null)
                 {
-                    var id = Convert.ToInt32(tagId);
-                    var tag = db.Tags.Find(id);
-                    post.Tags.Add(tag);
-                    db.Tags.Find(id).Posts.Add(post);
+                    foreach (var tagId in tags)
+                    {
+                        var id = Convert.ToInt32(tagId);
+                        var tag = db.Tags.Find(id);
+                        post.Tags.Add(tag);
+                        db.Tags.Find(id).Posts.Add(post);
+                    }
                 }
                 var categoryId = Convert.ToInt32(category);
                 var postCategory = db.Categories.Find(categoryId);

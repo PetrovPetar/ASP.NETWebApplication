@@ -59,6 +59,7 @@ namespace WebApplication.Controllers
           
             if (ModelState.IsValid)
             {
+                
                 foreach (var p in post)
                 {
                     var id = Convert.ToInt32(p);
@@ -68,9 +69,9 @@ namespace WebApplication.Controllers
                 }
                 db.Tags.Add(tag);
                 db.SaveChanges();
-                return RedirectToAction("Index");
+                return RedirectToAction("/Details/"+ tag.Id);
             }
-
+            
             return View(tag);
         }
 

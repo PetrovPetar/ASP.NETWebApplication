@@ -1,9 +1,9 @@
 
-﻿@model IEnumerable<WebApplication.Models.Post>
+﻿@model List<WebApplication.Models.Tag>
 
 @{
     ViewBag.Title = "Index";
-    
+    var tags = ViewBag.Tags;
 }
 
 <h2>Index</h2>
@@ -11,64 +11,24 @@
 <table class="table">
     <tr>
         <th>
-           Заглавие
+           Име на тага
         </th>
         <th>
-           Съдържание
+           Брой постове
         </th>
-        <th>
-           Автор
-        </th>
-        <th>
-           Дата
-        </th>
-        <th>
-            Коментари
-        </th>
-        <th>
-            Действия
-        </th>
+       
     </tr>
 
-@foreach (var item in Model) {
+@foreach (var item in tags) {
     <tr>
-        <td>@Html.ActionLink(item.Title, "Details",
-            "Posts", new { id = item.Id }, null)
+        <td>@Html.ActionLink((string)item.Name, "Details",
+            "Tags", new { id = item.Id }, null)
            
         </td>
         <td>
-            @Html.Raw(item.Body)
-        </td>
-        <td>
-            @Html.Raw(item.Author.UserName)
-        </td>
-        <td>
-            @Html.Raw(item.Date)
-        </td>
-        <td>
-            @Html.Raw(item.CommentsCount)
-        </td>
-        <td>
-            
-            @if (Roles.IsUserInRole(User.Identity.Name, "Admin"))
-            {
-                @Html.ActionLink("Edit", "Edit", new { id = item.Id })
-                <br />
-                @Html.ActionLink("Delete", "Delete", new { id = item.Id })
-                <br />
-            }
-            @if (!Roles.IsUserInRole(User.Identity.Name, "Admin") && 
-                User.Identity.Name == item.Author.UserName)
-            {
-                @Html.ActionLink("Edit", "Edit", new { id = item.Id })
-                <br />
-                @Html.ActionLink("Delete", "Delete", new { id = item.Id })
-                <br />
-            }
-            
-           
-        </td>
-    </tr>
+            @item.Posts.Count();
+      
+        </tr>
 }
 
 </table>

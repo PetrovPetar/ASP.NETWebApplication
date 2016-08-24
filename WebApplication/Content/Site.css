@@ -39,19 +39,19 @@ table, th, td{
     border:1px solid ;
     border:thin;
 }
-.left-posts {
+.admin-post {
+    margin-top:100px;
     text-align:justify;
     background-color: #EEE;
-    height:80%;
     border-radius:10px;
     
 }
-.left-posts>h2>a:hover,
-.left-posts>h3>a:hover{
+.admin-post>h2>a:hover,
+.admin-post>h3>a:hover{
    
     font-weight:bold;
 }
-.left-posts>h2>a, .left-posts>h3>a {
+.admin-post>h2>a, .admin-post>h3>a {
     text-decoration:none;
      color:black;
 }
