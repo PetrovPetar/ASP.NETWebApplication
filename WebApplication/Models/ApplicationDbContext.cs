@@ -23,7 +23,9 @@ namespace WebApplication.Models
         public IDbSet<Comment> Comments { get; set; }
 
         public IDbSet<Category> Categories { get; set; }
-        public System.Data.Entity.DbSet<WebApplication.Models.Tag> Tags { get; set; }
+
+        public IDbSet<Image> Images { get; set; }
+        public IDbSet<Tag> Tags { get; set; }
     }
 
 }

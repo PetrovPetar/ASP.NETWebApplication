@@ -1,156 +1,151 @@
-﻿//using System;
-//using System.Collections.Generic;
-//using System.Data;
-//using System.Data.Entity;
-//using System.IO;
-//using System.Linq;
-//using System.Net;
-//using System.Web;
-//using System.Web.Mvc;
-//using WebApplication.Models;
+﻿using System.Data.Entity;
+using System.IO;
+using System.Linq;
+using System.Net;
+using System.Web;
+using System.Web.Mvc;
+using WebApplication.Models;
 
-//namespace WebApplication.Controllers
-//{
-//    public class ImagesController : Controller
-//    {
-//        private ApplicationDbContext db = new ApplicationDbContext();
+namespace WebApplication.Controllers
+{
+    public class ImagesController : Controller
+    {
+        private ApplicationDbContext db = new ApplicationDbContext();
 
-//        // GET: Images
-//        public ActionResult Index()
-//        {
-//            var images = db.Images.ToList();
-//            return View(images);
-//        }
+        // GET: Images
+        public ActionResult Index()
+        {
+            var images = db.Images.ToList();
+            return View(images);
+        }
 
-//        // GET: Images/Details/5
-//        public ActionResult Details(int? id)
-//        {
-//            if (id == null)
-//            {
-//                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-//            }
-//            Image image = db.Images.Find(id);
-//            if (image == null)
-//            {
-//                return HttpNotFound();
-//            }
-//            return View(image);
-//        }
+        // GET: Images/Details/5
+        public ActionResult Details(int? id)
+        {
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            Image image = db.Images.Find(id);
+            if (image == null)
+            {
+                return HttpNotFound();
+            }
+            return View(image);
+        }
 
-//        // GET: Images/Create
-//        public ActionResult Create()
-//        {
-//            return View();
-//        }
+        // GET: Images/Create
+        public ActionResult Create()
+        {
+            return View();
+        }
 
-//        // POST: Images/Create
-//        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-//        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
-//        [HttpPost]
-//        [ValidateAntiForgeryToken]
-//        public ActionResult Create([Bind(Include = "Id")] Image image, HttpPostedFileBase file)
-//        {
-//            if (ModelState.IsValid)
-//            {
-               
-//                    if (file.ContentLength > 0)
-//                    {
-//                    foreach (var img in db.Images.ToList())
-//                    {
-//                        if(img.Name == file.FileName)
-//                        {
-//                            return RedirectToAction("../");
-//                        }
-//                    }
-//                        var fileName = Path.GetFileName(file.FileName);
-//                        var path = Path.Combine(Server.MapPath("~/Gallery/"), fileName);
-//                        file.SaveAs(path);
-//                        image.Name = fileName;
-                        
-//                        db.Images.Add(image);
-//                        db.SaveChanges();
-//                        return RedirectToAction("Index");
+        // POST: Images/Create
+        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
+        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult Create([Bind(Include = "Id")] Image image, HttpPostedFileBase file)
+        {
+            if (ModelState.IsValid)
+            {
 
-//                    }
-//                    ViewBag.Message = "Upload successful";
+                if (file.ContentLength > 0)
+                {
+                    foreach (var img in db.Images.ToList())
+                    {
+                        if (img.Name == file.FileName)
+                        {
+                            return RedirectToAction("../");
+                        }
+                    }
+                    var fileName = Path.GetFileName(file.FileName);
+                    var path = Path.Combine(Server.MapPath("~/Gallery/"), fileName);
+                    file.SaveAs(path);
+                    image.Name = fileName;
 
-             
-                
-//                return RedirectToAction("/Create");
-//            }
+                    db.Images.Add(image);
+                    db.SaveChanges();
+                    return RedirectToAction("Index");
 
-//            return View(image);
-//        }
+                }
+                ViewBag.Message = "Upload successful";
 
-//        // GET: Images/Edit/5
-//        public ActionResult Edit(int? id)
-//        {
-//            if (id == null)
-//            {
-//                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-//            }
-//            Image image = db.Images.Find(id);
-//            if (image == null)
-//            {
-//                return HttpNotFound();
-//            }
-//            return View(image);
-//        }
+                return RedirectToAction("/Create");
+            }
 
-//        // POST: Images/Edit/5
-//        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-//        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
-//        [HttpPost]
-//        [ValidateAntiForgeryToken]
-//        public ActionResult Edit([Bind(Include = "Id,Name,Content")] Image image)
-//        {
-//            if (ModelState.IsValid)
-//            {
-//                db.Entry(image).State = EntityState.Modified;
-//                db.SaveChanges();
-//                return RedirectToAction("Index");
-//            }
-//            return View(image);
-//        }
+            return View(image);
+        }
 
-//        // GET: Images/Delete/5
-//        public ActionResult Delete(int? id)
-//        {
-//            if (id == null)
-//            {
-//                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-//            }
-//            Image image = db.Images.Find(id);
-//            if (image == null)
-//            {
-//                return HttpNotFound();
-//            }
-//            return View(image);
-//        }
+        // GET: Images/Edit/5
+        public ActionResult Edit(int? id)
+        {
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            Image image = db.Images.Find(id);
+            if (image == null)
+            {
+                return HttpNotFound();
+            }
+            return View(image);
+        }
 
-//        // POST: Images/Delete/5
-//        [HttpPost, ActionName("Delete")]
-//        [ValidateAntiForgeryToken]
-//        public ActionResult DeleteConfirmed(int id)
-//        {
-//            Image image = db.Images.Find(id);
-//            db.Images.Remove(image);
-//            db.SaveChanges();
-//            return RedirectToAction("Index");
-//        }
+        // POST: Images/Edit/5
+        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
+        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult Edit([Bind(Include = "Id,Name,Content")] Image image)
+        {
+            if (ModelState.IsValid)
+            {
+                db.Entry(image).State = EntityState.Modified;
+                db.SaveChanges();
+                return RedirectToAction("Index");
+            }
+            return View(image);
+        }
 
-//        public FileResult Download(string ImageName)
-//        {
-//            return File("~/Gallery/" + ImageName, System.Net.Mime.MediaTypeNames.Application.Octet);
+        // GET: Images/Delete/5
+        public ActionResult Delete(int? id)
+        {
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            Image image = db.Images.Find(id);
+            if (image == null)
+            {
+                return HttpNotFound();
+            }
+            return View(image);
+        }
 
-//        }
-//        protected override void Dispose(bool disposing)
-//        {
-//            if (disposing)
-//            {
-//                db.Dispose();
-//            }
-//            base.Dispose(disposing);
-//        }
-//    }
-//}
+        // POST: Images/Delete/5
+        [HttpPost, ActionName("Delete")]
+        [ValidateAntiForgeryToken]
+        public ActionResult DeleteConfirmed(int id)
+        {
+            Image image = db.Images.Find(id);
+            db.Images.Remove(image);
+            db.SaveChanges();
+            return RedirectToAction("Index");
+        }
+
+        public FileResult Download(string ImageName)
+        {
+            return File("~/Gallery/" + ImageName, System.Net.Mime.MediaTypeNames.Application.Octet);
+
+        }
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+                db.Dispose();
+            }
+            base.Dispose(disposing);
+        }
+    }
+}

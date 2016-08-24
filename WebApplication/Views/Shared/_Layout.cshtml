@@ -11,7 +11,7 @@
 </head>
 <body>
     <div class="navbar navbar-inverse navbar-fixed-top">
-        <img class="img" src="~/Images/monkey-clipart-black-and-white-16981-monkey-face-svg.png" />
+        <img class="img" src="~/Img/monkey-clipart-black-and-white-16981-monkey-face-svg.png" />
 
         <div class="container">
             <div class="navbar-header">
@@ -37,8 +37,9 @@
                         <li>@Html.ActionLink("Нова категория", "Create", "Categories")</li>
                         <li>@Html.ActionLink("Категории", "Index", "Categories")</li>
                     }
-
+                    <li>@Html.ActionLink("Галерия", "Index", "Images")</li>
                     <li>@Html.ActionLink("Потребители", "Index", "Users")</li>
+
                 </ul>
                 @Html.Partial("_LoginPartial")
             </div>
