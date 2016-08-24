@@ -3,7 +3,7 @@
 
 @{
     ViewBag.Title = "Index";
-    
+    var posts = Model;
 }
 
 <h2>Index</h2>
@@ -30,39 +30,39 @@
         </th>
     </tr>
 
-@foreach (var item in Model) {
+@foreach (var post in posts) {
     <tr>
-        <td>@Html.ActionLink(item.Title, "Details",
-            "Posts", new { id = item.Id }, null)
+        <td>@Html.ActionLink((string)post.Title, "Details",
+            "Posts", new { id = post.Id }, null)
            
         </td>
         <td>
-            @Html.Raw(item.Body)
+            @Html.Raw(post.Body)
         </td>
         <td>
-            @Html.Raw(item.Author.UserName)
+            @Html.Raw(post.Author.UserName)
         </td>
         <td>
-            @Html.Raw(item.Date)
+            @Html.Raw(post.Date)
         </td>
         <td>
-            @Html.Raw(item.CommentsCount)
+            @Html.Raw(post.CommentsCount)
         </td>
         <td>
             
             @if (Roles.IsUserInRole(User.Identity.Name, "Admin"))
             {
-                @Html.ActionLink("Edit", "Edit", new { id = item.Id })
+                @Html.ActionLink("Edit", "Edit", new { id = post.Id })
                 <br />
-                @Html.ActionLink("Delete", "Delete", new { id = item.Id })
+                @Html.ActionLink("Delete", "Delete", new { id = post.Id })
                 <br />
             }
             @if (!Roles.IsUserInRole(User.Identity.Name, "Admin") && 
-                User.Identity.Name == item.Author.UserName)
+                User.Identity.Name == post.Author.UserName)
             {
-                @Html.ActionLink("Edit", "Edit", new { id = item.Id })
+                @Html.ActionLink("Edit", "Edit", new { id = post.Id })
                 <br />
-                @Html.ActionLink("Delete", "Delete", new { id = item.Id })
+                @Html.ActionLink("Delete", "Delete", new { id = post.Id })
                 <br />
             }
             
