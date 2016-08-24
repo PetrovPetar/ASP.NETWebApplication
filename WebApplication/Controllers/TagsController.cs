@@ -44,7 +44,7 @@ namespace WebApplication.Controllers
         public ActionResult Create()
         {
             
-            ViewBag.Posts = db.Posts;
+            ViewBag.Posts = db.Posts.ToList();
             return View();
         }
 
