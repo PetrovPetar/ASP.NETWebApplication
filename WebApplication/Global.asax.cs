@@ -16,7 +16,7 @@ namespace WebApplication
         {
             Database.SetInitializer(
                 new MigrateDatabaseToLatestVersion<ApplicationDbContext,
-                Migrations.Configurations>());
+                Migrations.Configuration>());
 
             AreaRegistration.RegisterAllAreas();
             FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
