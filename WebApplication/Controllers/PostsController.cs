@@ -45,7 +45,7 @@ namespace WebApplication.Controllers
         public ActionResult Create()
         {
             ViewBag.Tags = db.Tags.ToList();
-           // ViewBag.Categories = db.Categories.ToList();
+            ViewBag.Categories = db.Categories.ToList();
             return View();
         }
 
@@ -90,10 +90,10 @@ namespace WebApplication.Controllers
                     db.Tags.Find(id).Posts.Add(post);
                 }
                 var categoryId = Convert.ToInt32(category);
-               // var postCategory = db.Categories.Find(categoryId);
-               // post.Category = postCategory;
-                
-               // db.Categories.Find(categoryId).Posts.Add(post);
+                var postCategory = db.Categories.Find(categoryId);
+                post.Category = postCategory;
+
+                db.Categories.Find(categoryId).Posts.Add(post);
                 db.Posts.Add(post);
                 db.SaveChanges();
                 return RedirectToAction("Index");
