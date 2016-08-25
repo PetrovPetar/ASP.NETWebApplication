@@ -3,7 +3,7 @@
 
 @{
     ViewBag.Title = "Index";
-    var tags = ViewBag.Tags;
+   
 }
 
 <h2>Index</h2>
@@ -19,14 +19,14 @@
        
     </tr>
 
-@foreach (var item in tags) {
+@foreach (var item in Model) {
     <tr>
-        <td>@Html.ActionLink((string)item.Name, "Details",
+        <td>@Html.ActionLink(item.Name, "Details",
             "Tags", new { id = item.Id }, null)
            
         </td>
         <td>
-            @item.Posts.Count();
+            @item.Posts.Count()
       
         </tr>
 }

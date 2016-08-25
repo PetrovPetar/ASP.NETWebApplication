@@ -19,9 +19,11 @@ namespace WebApplication
                 Migrations.Configuration>());
 
             AreaRegistration.RegisterAllAreas();
+            GlobalFilters.Filters.Add(new Users(), 0);
             FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
             RouteConfig.RegisterRoutes(RouteTable.Routes);
             BundleConfig.RegisterBundles(BundleTable.Bundles);
         }
+      
     }
 }

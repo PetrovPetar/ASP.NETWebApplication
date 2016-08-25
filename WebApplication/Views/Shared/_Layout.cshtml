@@ -1,4 +1,6 @@
-﻿
+﻿@{ 
+    List<WebApplication.Models.ApplicationUser> users = ViewBag.Users;
+}
 ﻿<!DOCTYPE html>
 <html>
 <head>
@@ -10,6 +12,7 @@
 
 </head>
 <body>
+  
     <div class="navbar navbar-inverse navbar-fixed-top">
         <img class="img" src="~/Img/monkey-clipart-black-and-white-16981-monkey-face-svg.png" />
 
@@ -30,13 +33,16 @@
                     {
                         <li>@Html.ActionLink("Нова статия", "Create", "Posts")</li>
                     }
-                    @if (Roles.IsUserInRole(User.Identity.Name,"Admin"))
+                  
+                    @if (User.Identity.IsAuthenticated  &&
+                        users.FirstOrDefault(u => u.UserName == User.Identity.Name).Role == "Admin")
                     {
                         <li>@Html.ActionLink("Тагове", "Index", "Tags")</li>
                         <li>@Html.ActionLink("Нов таг", "Create", "Tags")</li>
                         <li>@Html.ActionLink("Нова категория", "Create", "Categories")</li>
                         <li>@Html.ActionLink("Категории", "Index", "Categories")</li>
                     }
+                    
                     <li>@Html.ActionLink("Галерия", "Index", "Images")</li>
                     <li>@Html.ActionLink("Потребители", "Index", "Users")</li>
 

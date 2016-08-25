@@ -74,6 +74,10 @@ namespace WebApplication.Controllers
                 return View(model);
             }
 
+            if (User.IsInRole("Admin"))
+            {
+                model.Role = "Admin";
+            }
             // This doesn't count login failures towards account lockout
             // To enable password failures to trigger account lockout, change to shouldLockout: true
             var result = await SignInManager.PasswordSignInAsync(model.Email, model.Password, model.RememberMe, shouldLockout: false);
@@ -88,6 +92,7 @@ namespace WebApplication.Controllers
                 case SignInStatus.Failure:
                 default:
                     ModelState.AddModelError("", "Грешен опит.");
+                    
                     return View(model);
             }
         }
@@ -152,7 +157,13 @@ namespace WebApplication.Controllers
         {
             if (ModelState.IsValid)
             {
-                var user = new ApplicationUser { UserName = model.Email, Email = model.Email, FullName = model.FullName };
+                var user = new ApplicationUser
+                {
+                    UserName = model.Email,
+                    Email = model.Email,
+                    FullName = model.FullName,
+                    Role = "User"
+                };
                 var result = await UserManager.CreateAsync(user, model.Password);
                 if (result.Succeeded)
                 {

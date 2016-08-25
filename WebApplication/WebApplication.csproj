@@ -223,9 +223,9 @@
     <Compile Include="Models\Post.cs" />
     <Compile Include="Models\PostTags.cs" />
     <Compile Include="Models\Tag.cs" />
+    <Compile Include="Models\Users.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Startup.cs" />
-    <Compile Include="YourAppNameSpace\Filters.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\bootstrap.css" />
