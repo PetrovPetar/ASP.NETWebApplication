@@ -15,7 +15,7 @@ namespace WebApplication.Controllers
         
         public ActionResult Index()
         {
-            ViewBag.Users = db.Users.ToList();
+            
             ViewBag.Categories = db.Categories.ToList();
             ViewBag.Tags = db.Tags.ToList();
             var posts = db.Posts.Include(p => p.Author)

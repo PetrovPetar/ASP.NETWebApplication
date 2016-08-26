@@ -42,6 +42,7 @@ namespace WebApplication.Controllers
         }
 
         // GET: Posts/Create
+        [Authorize]
         public ActionResult Create()
         {
             ViewBag.Tags = db.Tags.ToList();
@@ -55,6 +56,7 @@ namespace WebApplication.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [ValidateInput(false)]
+        [Authorize]
         public ActionResult Create([Bind(Include = "Id,Title,Body,Date,Author_Id")] Post post,
             string category,  string [] tags, HttpPostedFileBase file)
         {
@@ -106,18 +108,27 @@ namespace WebApplication.Controllers
         }
 
         // GET: Posts/Edit/5
+        [Authorize]
         public ActionResult Edit(int? id)
         {
-            if (id == null)
+            var currentPost = db.Posts.Single(p => p.Id == id);
+            var currentUser = db.Users.FirstOrDefault(u => u.UserName == User.Identity.Name);
+
+            if (User.Identity.Name == currentPost.Author.UserName || 
+               currentUser.Role == "Admin")
             {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                if (id == null)
+                {
+                    return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                }
+                Post post = db.Posts.Find(id);
+                if (post == null)
+                {
+                    return HttpNotFound();
+                }
+                return View(post);
             }
-            Post post = db.Posts.Find(id);
-            if (post == null)
-            {
-                return HttpNotFound();
-            }
-            return View(post);
+            return RedirectToAction("Index");
         }
 
         // POST: Posts/Edit/5
@@ -126,6 +137,7 @@ namespace WebApplication.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [ValidateInput(false)]
+        [Authorize]
         public ActionResult Edit( Post post, string Title, string Body, int? id)
         {
             if (ModelState.IsValid)
@@ -141,23 +153,33 @@ namespace WebApplication.Controllers
         }
 
         // GET: Posts/Delete/5
+        [Authorize]
         public ActionResult Delete(int? id)
         {
-            if (id == null)
+            var currentPost = db.Posts.Single(p => p.Id == id);
+            var currentUser = db.Users.FirstOrDefault(u => u.UserName == User.Identity.Name);
+
+            if (User.Identity.Name == currentPost.Author.UserName ||
+               currentUser.Role == "Admin")
             {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                if (id == null)
+                {
+                    return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                }
+                Post post = db.Posts.Find(id);
+                if (post == null)
+                {
+                    return HttpNotFound();
+                }
+                return View(post);
             }
-            Post post = db.Posts.Find(id);
-            if (post == null)
-            {
-                return HttpNotFound();
-            }
-            return View(post);
+            return RedirectToAction("Index");
         }
 
         // POST: Posts/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
+        [Authorize]
         public ActionResult DeleteConfirmed(int id)
         {
             Post post = db.Posts.Find(id);

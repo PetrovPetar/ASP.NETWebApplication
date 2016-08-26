@@ -4,6 +4,7 @@
 @{
     ViewBag.Title = "Index";
     var posts = Model;
+    List<WebApplication.Models.ApplicationUser> users = ViewBag.Users;
 }
 
 <h2>Index</h2>
@@ -50,14 +51,16 @@
         </td>
         <td>
             
-            @if (Roles.IsUserInRole(User.Identity.Name, "Admin"))
+            @if (User.Identity.IsAuthenticated &&
+                        users.FirstOrDefault(u => u.UserName == User.Identity.Name).Role == "Admin")
             {
                 @Html.ActionLink("Edit", "Edit", new { id = post.Id })
                 <br />
                 @Html.ActionLink("Delete", "Delete", new { id = post.Id })
                 <br />
             }
-            @if (!Roles.IsUserInRole(User.Identity.Name, "Admin") && 
+            @if (User.Identity.IsAuthenticated &&
+                users.FirstOrDefault(u => u.UserName == User.Identity.Name).Role != "Admin" &&
                 User.Identity.Name == post.Author.UserName)
             {
                 @Html.ActionLink("Edit", "Edit", new { id = post.Id })
