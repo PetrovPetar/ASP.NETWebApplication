@@ -94,18 +94,26 @@ namespace WebApplication.Controllers
         // GET: Comments/Edit/5
         public ActionResult Edit(int? id)
         {
-            if (id == null)
+            var currentComment = db.Comments.Single(c => c.Id == id);
+            var currentUser = db.Users.FirstOrDefault(u => u.UserName == User.Identity.Name);
+
+            if (User.Identity.IsAuthenticated && (User.Identity.Name == currentComment.Author.UserName ||
+               currentUser.Role == "Admin"))
             {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                if (id == null)
+                {
+                    return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                }
+                Comment comment = db.Comments.Find(id);
+                if (comment == null)
+                {
+                    return HttpNotFound();
+                }
+                ViewBag.Author_Id = new SelectList(db.Users, "Id", "FullName", comment.Author_Id);
+                ViewBag.Post_Id = new SelectList(db.Posts, "Id", "Title", comment.Post_Id);
+                return View(comment);
             }
-            Comment comment = db.Comments.Find(id);
-            if (comment == null)
-            {
-                return HttpNotFound();
-            }
-            ViewBag.Author_Id = new SelectList(db.Users, "Id", "FullName", comment.Author_Id);
-            ViewBag.Post_Id = new SelectList(db.Posts, "Id", "Title", comment.Post_Id);
-            return View(comment);
+            return RedirectToAction("../");
         }
 
         // POST: Comments/Edit/5
@@ -132,17 +140,24 @@ namespace WebApplication.Controllers
         // GET: Comments/Delete/5
         public ActionResult Delete(int? id)
         {
-            
-            if (id == null)
+            var currentComment = db.Comments.Single(c => c.Id == id);
+            var currentUser = db.Users.FirstOrDefault(u => u.UserName == User.Identity.Name);
+
+            if (User.Identity.IsAuthenticated && (User.Identity.Name == currentComment.Author.UserName ||
+               currentUser.Role == "Admin"))
             {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                if (id == null)
+                {
+                    return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                }
+                Comment comment = db.Comments.Find(id);
+                if (comment == null)
+                {
+                    return HttpNotFound();
+                }
+                return View(comment);
             }
-            Comment comment = db.Comments.Find(id);
-            if (comment == null)
-            {
-                return HttpNotFound();
-            }
-            return View(comment);
+            return RedirectToAction("../");
         }
 
         // POST: Comments/Delete/5

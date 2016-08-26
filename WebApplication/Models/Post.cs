@@ -41,7 +41,10 @@ namespace WebApplication.Models
 
         public virtual ICollection<Tag> Tags { get; set; }
 
-        public  Category Category { get; set; }
+        public int Category_Id { get; set; }
+
+        [ForeignKey("Category_Id")]
+        public virtual Category Category { get; set; }
 
         public virtual string FileName { get; set; }
     }

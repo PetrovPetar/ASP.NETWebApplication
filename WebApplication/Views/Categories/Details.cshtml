@@ -3,6 +3,7 @@
 
 @{
     ViewBag.Title = "Details";
+    List<WebApplication.Models.ApplicationUser> users = ViewBag.Users;
 }
 
 <h2>Details</h2>
@@ -58,11 +59,11 @@
            
         </dl>
     </div>
-    <br /><br />
+    <br />
 }
 
 <p>
-    @Html.ActionLink("Edit", "Edit", new { id = Model.Id }) |
+    
     @Html.ActionLink("Back to List", "Index")
 </p>
 

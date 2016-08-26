@@ -16,9 +16,16 @@ namespace WebApplication.Controllers
         private ApplicationDbContext db = new ApplicationDbContext();
 
         // GET: Categories
+        
         public ActionResult Index()
         {
-            return View(db.Categories.ToList());
+            var currentUser = db.Users.FirstOrDefault(u => u.UserName == User.Identity.Name);
+
+            if (User.Identity.IsAuthenticated && currentUser.Role == "Admin")
+            {
+                return View(db.Categories.ToList());
+            }
+            return RedirectToAction("../");
         }
 
         // GET: Categories/Details/5
@@ -41,7 +48,13 @@ namespace WebApplication.Controllers
       
         public ActionResult Create()
         {
-            return View();
+            var currentUser = db.Users.FirstOrDefault(u => u.UserName == User.Identity.Name);
+
+            if (User.Identity.IsAuthenticated && currentUser.Role == "Admin")
+            {
+                return View();
+            }
+            return RedirectToAction("../");
         }
 
         // POST: Categories/Create
@@ -64,19 +77,26 @@ namespace WebApplication.Controllers
         }
 
         // GET: Categories/Edit/5
-        [Authorize(Roles = "Admin")]
+       
         public ActionResult Edit(int? id)
         {
-            if (id == null)
+            ViewBag.Posts = db.Posts.ToList();
+            var currentUser = db.Users.FirstOrDefault(u => u.UserName == User.Identity.Name);
+
+            if (User.Identity.IsAuthenticated && currentUser.Role == "Admin")
             {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                if (id == null)
+                {
+                    return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                }
+                Category category = db.Categories.Find(id);
+                if (category == null)
+                {
+                    return HttpNotFound();
+                }
+                return View(category);
             }
-            Category category = db.Categories.Find(id);
-            if (category == null)
-            {
-                return HttpNotFound();
-            }
-            return View(category);
+            return RedirectToAction("../");
         }
 
         // POST: Categories/Edit/5
@@ -84,11 +104,21 @@ namespace WebApplication.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Authorize(Roles = "Admin")]
-        public ActionResult Edit([Bind(Include = "Id,Name")] Category category)
+        
+        public ActionResult Edit([Bind(Include = "Id,Name")] Category category, string [] posts)
         {
             if (ModelState.IsValid)
             {
+                foreach (var p in posts)
+                {
+                    var postId = Convert.ToInt32(p);
+                    var currentPost = db.Posts.Find(postId);
+                    category.Posts.Add(currentPost);
+                    var previousCategory = db.Posts.Find(postId).Category;
+                    db.Categories.Find(previousCategory.Id).Posts.Remove(currentPost);
+                    db.Posts.Find(postId).Category = category;
+
+                }
                 db.Entry(category).State = EntityState.Modified;
                 db.SaveChanges();
                 return RedirectToAction("Index");
@@ -97,25 +127,31 @@ namespace WebApplication.Controllers
         }
 
         // GET: Categories/Delete/5
-        [Authorize(Roles = "Admin")]
+        
         public ActionResult Delete(int? id)
         {
-            if (id == null)
+            var currentUser = db.Users.FirstOrDefault(u => u.UserName == User.Identity.Name);
+
+            if (User.Identity.IsAuthenticated && currentUser.Role == "Admin")
             {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                if (id == null)
+                {
+                    return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                }
+                Category category = db.Categories.Find(id);
+                if (category == null)
+                {
+                    return HttpNotFound();
+                }
+                return View(category);
             }
-            Category category = db.Categories.Find(id);
-            if (category == null)
-            {
-                return HttpNotFound();
-            }
-            return View(category);
+            return RedirectToAction("../");
         }
 
         // POST: Categories/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        [Authorize(Roles = "Admin")]
+        
         public ActionResult DeleteConfirmed(int id)
         {
             Category category = db.Categories.Find(id);

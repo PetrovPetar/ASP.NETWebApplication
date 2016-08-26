@@ -43,9 +43,16 @@ namespace WebApplication.Controllers
        
         public ActionResult Create()
         {
-            
-            ViewBag.Posts = db.Posts.ToList();
-            return View();
+           
+            var currentUser = db.Users.FirstOrDefault(u => u.UserName == User.Identity.Name);
+
+            if (User.Identity.IsAuthenticated && 
+               currentUser.Role == "Admin")
+            {
+                ViewBag.Posts = db.Posts.ToList();
+                return View();
+            }
+            return RedirectToAction("../");
         }
 
         // POST: Tags/Create
@@ -79,16 +86,23 @@ namespace WebApplication.Controllers
        
         public ActionResult Edit(int? id)
         {
-            if (id == null)
+            var currentUser = db.Users.FirstOrDefault(u => u.UserName == User.Identity.Name);
+
+            if (User.Identity.IsAuthenticated &&
+               currentUser.Role == "Admin")
             {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                if (id == null)
+                {
+                    return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                }
+                Tag tag = db.Tags.Find(id);
+                if (tag == null)
+                {
+                    return HttpNotFound();
+                }
+                return View(tag);
             }
-            Tag tag = db.Tags.Find(id);
-            if (tag == null)
-            {
-                return HttpNotFound();
-            }
-            return View(tag);
+            return RedirectToAction("../");
         }
 
         // POST: Tags/Edit/5
@@ -112,16 +126,23 @@ namespace WebApplication.Controllers
        
         public ActionResult Delete(int? id)
         {
-            if (id == null)
+            var currentUser = db.Users.FirstOrDefault(u => u.UserName == User.Identity.Name);
+
+            if (User.Identity.IsAuthenticated &&
+               currentUser.Role == "Admin")
             {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                if (id == null)
+                {
+                    return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                }
+                Tag tag = db.Tags.Find(id);
+                if (tag == null)
+                {
+                    return HttpNotFound();
+                }
+                return View(tag);
             }
-            Tag tag = db.Tags.Find(id);
-            if (tag == null)
-            {
-                return HttpNotFound();
-            }
-            return View(tag);
+            return RedirectToAction("../");
         }
 
         // POST: Tags/Delete/5
