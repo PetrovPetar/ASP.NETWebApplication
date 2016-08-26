@@ -154,11 +154,13 @@ namespace WebApplication.Controllers
         
         public ActionResult DeleteConfirmed(int id)
         {
+
             Category category = db.Categories.Find(id);
-            var categoryOther = db.Categories.Find(10);
+            var categoryOther = db.Categories.Find(21);
             foreach (var post in category.Posts.ToList())
             {
                 db.Posts.Find(post.Id).Category = categoryOther;
+                categoryOther.Posts.Add(post);
             }
 
             db.Categories.Remove(category);

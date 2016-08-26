@@ -45,11 +45,11 @@ namespace WebApplication.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        
         public ActionResult Create([Bind(Include = "Id")] Image image, HttpPostedFileBase file)
         {
-            if (ModelState.IsValid)
+            if (User.Identity.IsAuthenticated)
             {
-
                 if (file.ContentLength > 0)
                 {
                     foreach (var img in db.Images.ToList())
@@ -69,12 +69,12 @@ namespace WebApplication.Controllers
                     return RedirectToAction("Index");
 
                 }
-                ViewBag.Message = "Upload successful";
 
-                return RedirectToAction("/Create");
             }
 
-            return View(image);
+
+            return RedirectToAction("../");
+           
         }
 
         // GET: Images/Edit/5
