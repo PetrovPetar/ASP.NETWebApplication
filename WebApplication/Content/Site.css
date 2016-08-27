@@ -40,7 +40,7 @@ table, th, td{
     border:thin;
 }
 .admin-post {
-    margin-top:100px;
+   
     text-align:justify;
     background-color: #EEE;
     border-radius:10px;
@@ -86,4 +86,10 @@ table, th, td{
     margin-top: 3px;
     
 }
-
+.alert {
+    text-align:center;
+    margin-top:10px;
+}
+.body-content{
+    margin-top:100px;
+}

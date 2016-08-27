@@ -1,5 +1,5 @@
 
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.Entity;
@@ -8,6 +8,7 @@ using System.Linq;
 using System.Net;
 using System.Web;
 using System.Web.Mvc;
+using WebApplication.Extensions;
 using WebApplication.Models;
 
 namespace WebApplication.Controllers
@@ -79,7 +80,7 @@ namespace WebApplication.Controllers
                     ViewBag.Message = "Upload failed";
 
                 }
-
+               
                 post.Author = db.Users.FirstOrDefault(u => u.UserName == User.Identity.Name);
                 post.CommentsCount = 0;
                 post.Date = DateTime.Now;
@@ -101,9 +102,10 @@ namespace WebApplication.Controllers
                 db.Categories.Find(categoryId).Posts.Add(post);
                 db.Posts.Add(post);
                 db.SaveChanges();
+                this.AddNotification("Статията е успешно създадена.", NotificationType.INFO);
                 return RedirectToAction("Index");
             }
-           
+          
             return View(post);
         }
 
@@ -147,8 +149,10 @@ namespace WebApplication.Controllers
                 post.Body = Body;
                 db.Entry(post).State = EntityState.Modified;
                 db.SaveChanges();
+                this.AddNotification("Статията е успешно редактирана.", NotificationType.INFO);
                 return RedirectToAction("Index");
             }
+            this.AddNotification("Грешка! Някое от полетата не е попълнено коректно.", NotificationType.ERROR);
             return View(post);
         }
 
@@ -194,6 +198,7 @@ namespace WebApplication.Controllers
             }
             db.Posts.Remove(post);
             db.SaveChanges();
+            this.AddNotification("Статията е изтрита.", NotificationType.INFO);
             return RedirectToAction("Index");
         }
         public FileResult Download(string ImageName)

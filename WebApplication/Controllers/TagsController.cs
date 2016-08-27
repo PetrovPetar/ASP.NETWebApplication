@@ -66,14 +66,17 @@ namespace WebApplication.Controllers
           
             if (ModelState.IsValid)
             {
-                
-                foreach (var p in post)
+                if(post != null)
                 {
-                    var id = Convert.ToInt32(p);
-                    tag.Posts.Add(db.Posts.Single(x => x.Id == id));
-                    
-                    db.Posts.Find(id).Tags.Add(tag);
+                    foreach (var p in post)
+                    {
+                        var id = Convert.ToInt32(p);
+                        tag.Posts.Add(db.Posts.Single(x => x.Id == id));
+
+                        db.Posts.Find(id).Tags.Add(tag);
+                    }
                 }
+               
                 db.Tags.Add(tag);
                 db.SaveChanges();
                 return RedirectToAction("/Details/"+ tag.Id);

@@ -11,7 +11,7 @@
 @using (Html.BeginForm("Create", "Posts", FormMethod.Post, new { enctype = "multipart/form-data" }))
 {
     @Html.AntiForgeryToken()
-
+     
     var allTags = ViewBag.Tags;
     var allCategories = ViewBag.Categories;
     List<SelectListItem> listCategories = new List<SelectListItem>();
