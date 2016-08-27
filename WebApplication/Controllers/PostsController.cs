@@ -84,7 +84,7 @@ namespace WebApplication.Controllers
                 post.Author = db.Users.FirstOrDefault(u => u.UserName == User.Identity.Name);
                 post.CommentsCount = 0;
                 post.Date = DateTime.Now;
-
+                
                 if(tags != null)
                 {
                     foreach (var tagId in tags)
@@ -99,6 +99,7 @@ namespace WebApplication.Controllers
                 var postCategory = db.Categories.Find(categoryId);
                 post.Category = postCategory;
 
+                db.Users.Find(post.Author.Id).Posts.Add(post);
                 db.Categories.Find(categoryId).Posts.Add(post);
                 db.Posts.Add(post);
                 db.SaveChanges();
@@ -196,6 +197,7 @@ namespace WebApplication.Controllers
                 var tagId = tag.Id;
                 db.Tags.Find(tagId).Posts.Remove(post);
             }
+            db.Users.Find(post.Author.Id).Posts.Remove(post);
             db.Posts.Remove(post);
             db.SaveChanges();
             this.AddNotification("Статията е изтрита.", NotificationType.INFO);

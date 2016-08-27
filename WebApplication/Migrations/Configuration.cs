@@ -22,15 +22,15 @@
         {
 
 
-            if (!context.Users.Any())
+            if (!context.Posts.Any())
             {
-                CreateUser(context, "pesho@gmail.com", "123", "Peter Ivanov", "User");
-                CreateUser(context, "merry@gmail.com", "123", "Maria Petrova", "User");
-                CreateUser(context, "geshu@gmail.com", "123", "George Petrov", "User");
+                //CreateUser(context, "pesho@gmail.com", "123", "Peter Ivanov", "User");
+                //CreateUser(context, "merry@gmail.com", "123", "Maria Petrova", "User");
+                //CreateUser(context, "geshu@gmail.com", "123", "George Petrov", "User");
 
-                CreateUser(context, "petar@petrov.com", "123", "Administrator", "Admin");
-                CreateRole(context, "Admin");
-                AddUserToRole(context, "petar@petrov.com", "Admin");
+                //CreateUser(context, "petar@petrov.com", "123", "Administrator", "Admin");
+                //CreateRole(context, "Admin");
+                //AddUserToRole(context, "petar@petrov.com", "Admin");
 
                 CreatePost(context,
     title: "Work Begins on HTML5.1",

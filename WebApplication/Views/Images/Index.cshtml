@@ -2,6 +2,8 @@
 
 @{
     ViewBag.Title = "Index";
+    List <WebApplication.Models.ApplicationUser> users = ViewBag.Users;
+    WebApplication.Models.ApplicationUser currentUser = users.FirstOrDefault(u => u.UserName == User.Identity.Name);
 }
 
 <h2>Index</h2>
@@ -38,13 +40,17 @@
        
         </td>
         <td>
-            @if (Roles.IsUserInRole("Admin"))
+            @image.Author.UserName
+        </td>
+        <td>
+            @if (User.Identity.IsAuthenticated)
             {
-                @Html.ActionLink("Edit", "Edit", new { id = image.Id }) 
-                <br />
-                @Html.ActionLink("Details", "Details", new { id = image.Id })
-                <br />
-                @Html.ActionLink("Delete", "Delete", new { id = image.Id })
+                if (image.Author.UserName == User.Identity.Name ||
+                currentUser.Role == "Admin")
+                {
+
+                    @Html.ActionLink("Delete", "Delete", new { id = image.Id })
+                }
             }
         </td>
     </tr>

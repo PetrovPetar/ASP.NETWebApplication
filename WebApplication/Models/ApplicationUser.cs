@@ -10,12 +10,19 @@ namespace WebApplication.Models
 
     public class ApplicationUser : IdentityUser
     {
-       
+       public ApplicationUser()
+        {
+            this.Posts = new HashSet<Post>();
+            Comments = new HashSet<Comment>();
+            Images = new HashSet<Image>();
+        }
         [StringLength(90)]
         public string FullName { get; set; }
         public string Role { get; set; }
         public HashSet<Post> Posts { get; set; }
         public HashSet<Comment> Comments { get; set; }
+
+        public HashSet<Image> Images { get; set; }
         public async Task<ClaimsIdentity> GenerateUserIdentityAsync(UserManager<ApplicationUser> manager)
         {
             // Note the authenticationType must match the one defined in CookieAuthenticationOptions.AuthenticationType

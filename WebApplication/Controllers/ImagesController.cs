@@ -64,8 +64,10 @@ namespace WebApplication.Controllers
                     var fileName = Path.GetFileName(file.FileName);
                     var path = Path.Combine(Server.MapPath("~/Gallery/"), fileName);
                     file.SaveAs(path);
-                    image.Name = fileName;
 
+                    image.Name = fileName;
+                    image.Author = db.Users.Single(u => u.UserName == User.Identity.Name);
+                    db.Users.Find(image.Author.Id).Images.Add(image);
                     db.Images.Add(image);
                     db.SaveChanges();
                     this.AddNotification("Успешно качихте изображението.", NotificationType.SUCCESS);
@@ -75,55 +77,35 @@ namespace WebApplication.Controllers
                 this.AddNotification("Грешка! Файлът не се качи.", NotificationType.ERROR);
             }
 
-            this.AddNotification("Грешка! Първо трябва да се впишете с потребителски профил.", NotificationType.ERROR);
-            return RedirectToAction("../");
+            this.AddNotification("Първо трябва да се впишете с потребителски профил.", NotificationType.WARNING);
+            return RedirectToAction("Index");
            
         }
 
         // GET: Images/Edit/5
-        public ActionResult Edit(int? id)
-        {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            Image image = db.Images.Find(id);
-            if (image == null)
-            {
-                return HttpNotFound();
-            }
-            return View(image);
-        }
-
-        // POST: Images/Edit/5
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "Id,Name,Content")] Image image)
-        {
-            if (ModelState.IsValid)
-            {
-                db.Entry(image).State = EntityState.Modified;
-                db.SaveChanges();
-                return RedirectToAction("Index");
-            }
-            return View(image);
-        }
-
+       
         // GET: Images/Delete/5
+        [Authorize]
         public ActionResult Delete(int? id)
         {
-            if (id == null)
+            var currentUser = db.Users.FirstOrDefault(u => u.UserName == User.Identity.Name);
+            var currentImage = db.Images.Find(id);
+
+            if(currentImage.Author.UserName == User.Identity.Name ||
+                currentUser.Role == "Admin")
             {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                if (id == null)
+                {
+                    return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                }
+                Image image = db.Images.Find(id);
+                if (image == null)
+                {
+                    return HttpNotFound();
+                }
+                return View(image);
             }
-            Image image = db.Images.Find(id);
-            if (image == null)
-            {
-                return HttpNotFound();
-            }
-            return View(image);
+            return RedirectToAction("Index");
         }
 
         // POST: Images/Delete/5
@@ -131,9 +113,17 @@ namespace WebApplication.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {
+
             Image image = db.Images.Find(id);
-            db.Images.Remove(image);
-            db.SaveChanges();
+            if(image != null)
+            {
+                db.Images.Remove(image);
+                db.Users.Find(image.Author.Id).Images.Remove(image);
+                db.SaveChanges();
+                this.AddNotification("Изображението е изтрито.", NotificationType.INFO);
+                return RedirectToAction("Index");
+            }
+            this.AddNotification("Грешка! Изображението не съществува!", NotificationType.ERROR);
             return RedirectToAction("Index");
         }
 

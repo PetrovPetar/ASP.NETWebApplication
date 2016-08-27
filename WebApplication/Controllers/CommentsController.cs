@@ -81,6 +81,7 @@ namespace WebApplication.Controllers
                 comment.Post = post;
                 post.CommentsCount++;
                 db.Comments.Add(comment);
+                db.Users.Find(comment.Author.Id).Comments.Add(comment);
                 db.Posts.Find(id).Comments.Add(comment);
                 db.SaveChanges();
                 this.AddNotification("Коментарът е изпратен.", NotificationType.SUCCESS);
@@ -173,6 +174,7 @@ namespace WebApplication.Controllers
             var postId = comment.Post.Id;
             db.Posts.Find(postId).CommentsCount--;
             db.Posts.Find(postId).Comments.Remove(comment);
+            db.Users.Find(comment.Author.Id).Comments.Remove(comment);
             db.Comments.Remove(comment);
             db.SaveChanges();
             this.AddNotification("Коментарът е изтрит.", NotificationType.INFO);
