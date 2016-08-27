@@ -102,11 +102,11 @@ namespace WebApplication.Controllers
                 db.Categories.Find(categoryId).Posts.Add(post);
                 db.Posts.Add(post);
                 db.SaveChanges();
-                this.AddNotification("Статията е успешно създадена.", NotificationType.INFO);
+                this.AddNotification("Статията е успешно създадена.", NotificationType.SUCCESS);
                 return RedirectToAction("Index");
             }
-          
-            return View(post);
+            this.AddNotification("Грешка! Някое от полетата не е попълнено.", NotificationType.ERROR);
+            return RedirectToAction("/Create");
         }
 
         // GET: Posts/Edit/5
@@ -149,11 +149,11 @@ namespace WebApplication.Controllers
                 post.Body = Body;
                 db.Entry(post).State = EntityState.Modified;
                 db.SaveChanges();
-                this.AddNotification("Статията е успешно редактирана.", NotificationType.INFO);
+                this.AddNotification("Статията е успешно редактирана.", NotificationType.SUCCESS);
                 return RedirectToAction("Index");
             }
             this.AddNotification("Грешка! Някое от полетата не е попълнено коректно.", NotificationType.ERROR);
-            return View(post);
+            return RedirectToAction("/Edit/" + id);
         }
 
         // GET: Posts/Delete/5

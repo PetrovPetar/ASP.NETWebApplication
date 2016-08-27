@@ -4,6 +4,7 @@ using System.Linq;
 using System.Net;
 using System.Web;
 using System.Web.Mvc;
+using WebApplication.Extensions;
 using WebApplication.Models;
 
 namespace WebApplication.Controllers
@@ -56,7 +57,8 @@ namespace WebApplication.Controllers
                     {
                         if (img.Name == file.FileName)
                         {
-                            return RedirectToAction("../");
+                            this.AddNotification("Изображението вече го има!", NotificationType.WARNING);
+                            return RedirectToAction("Index");
                         }
                     }
                     var fileName = Path.GetFileName(file.FileName);
@@ -66,13 +68,14 @@ namespace WebApplication.Controllers
 
                     db.Images.Add(image);
                     db.SaveChanges();
+                    this.AddNotification("Успешно качихте изображението.", NotificationType.SUCCESS);
                     return RedirectToAction("Index");
 
                 }
-
+                this.AddNotification("Грешка! Файлът не се качи.", NotificationType.ERROR);
             }
 
-
+            this.AddNotification("Грешка! Първо трябва да се впишете с потребителски профил.", NotificationType.ERROR);
             return RedirectToAction("../");
            
         }

@@ -1,5 +1,5 @@
 
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.Entity;
@@ -8,6 +8,7 @@ using System.Linq;
 using System.Net;
 using System.Web;
 using System.Web.Mvc;
+using WebApplication.Extensions;
 using WebApplication.Models;
 
 namespace WebApplication.Controllers
@@ -82,13 +83,13 @@ namespace WebApplication.Controllers
                 db.Comments.Add(comment);
                 db.Posts.Find(id).Comments.Add(comment);
                 db.SaveChanges();
-                
+                this.AddNotification("Коментарът е изпратен.", NotificationType.SUCCESS);
                 return RedirectToAction("../Posts/Details/" + id);
-            } 
-
+            }
+            this.AddNotification("Грешка! Коментарът трябва да съдържа поне един символ.", NotificationType.ERROR);
             ViewBag.Author_Id = new SelectList(db.Users, "Id", "FullName", comment.Author_Id);
             ViewBag.Post_Id = new SelectList(db.Posts, "Id", "Title", comment.Post_Id);
-            return View(comment);
+            return RedirectToAction("/Create/" + id);
         }
 
         // GET: Comments/Edit/5
@@ -111,6 +112,7 @@ namespace WebApplication.Controllers
                 }
                 ViewBag.Author_Id = new SelectList(db.Users, "Id", "FullName", comment.Author_Id);
                 ViewBag.Post_Id = new SelectList(db.Posts, "Id", "Title", comment.Post_Id);
+
                 return View(comment);
             }
             return RedirectToAction("../");
@@ -122,19 +124,20 @@ namespace WebApplication.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [ValidateInput(false)]
-        public ActionResult Edit(Comment newComment, string Text, string postId, int? id)
+        public ActionResult Edit(Comment newComment, string text, string postId, int? id)
         {
             if (ModelState.IsValid)
             {
                 var oldComment = db.Comments.Find(id);
                 newComment = oldComment;
-                newComment.Text = Text;
+                newComment.Text = text;
                 db.Entry(newComment).State = EntityState.Modified;
                 db.SaveChanges();
+                this.AddNotification("Коментарът е редактиран.", NotificationType.SUCCESS);
                 return RedirectToAction("../Posts/Details/"+ postId);
             }
-            
-            return View(newComment);
+            this.AddNotification("Грешка! Коментарът трябва да съдържа поне един символ.", NotificationType.ERROR);
+            return RedirectToAction("/Edit/" + id);
         }
 
         // GET: Comments/Delete/5
@@ -172,6 +175,7 @@ namespace WebApplication.Controllers
             db.Posts.Find(postId).Comments.Remove(comment);
             db.Comments.Remove(comment);
             db.SaveChanges();
+            this.AddNotification("Коментарът е изтрит.", NotificationType.INFO);
             return RedirectToAction("../Posts/Details/" + postId);
         }
     

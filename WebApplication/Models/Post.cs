@@ -20,11 +20,11 @@ namespace WebApplication.Models
         [Key]
         public int Id { get; set; }
 
-        [Required]
+        [Required(ErrorMessage = "Това поле не може да е празно.")]
         [StringLength(100)]
         public string Title { get; set; }
 
-        [Required]
+        [Required(ErrorMessage = "Това поле не може да е празно.")]
         public string Body { get; set; }
 
         [Required]

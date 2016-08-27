@@ -19,7 +19,7 @@ namespace WebApplication.Models
         [Key]
         public int Id { get; set; }
 
-        [Required]
+        [Required(ErrorMessage = "Това поле не може да бъде празно.")]
         [UIHint("tinymce_full"), AllowHtml]
         public string Text { get; set; }
 
