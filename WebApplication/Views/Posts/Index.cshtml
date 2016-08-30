@@ -1,4 +1,3 @@
-
 ﻿@model IEnumerable<WebApplication.Models.Post>
 
 @{
@@ -6,22 +5,21 @@
     var posts = Model;
     List<WebApplication.Models.ApplicationUser> users = ViewBag.Users;
 }
-
-<h2>Index</h2>
-
+<img class="col-md-12" src="~/Img/header_w1170x200_offerings_002.jpg" />
+<h2>Статии</h2>
 <table class="table">
     <tr>
         <th>
-           Заглавие
+            Заглавие
         </th>
         <th>
-           Съдържание
+            Съдържание
         </th>
         <th>
-           Автор
+            Автор
         </th>
         <th>
-           Дата
+            Дата
         </th>
         <th>
             Коментари
@@ -31,17 +29,20 @@
         </th>
     </tr>
 
-@foreach (var post in posts) {
-    <tr>
-        <td>@Html.ActionLink((string)post.Title, "Details",
+    @foreach (var post in posts)
+    {
+        <tr>
+            <td>
+                @Html.ActionLink(post.Title, "Details",
             "Posts", new { id = post.Id }, null)
-           
+
         </td>
         <td>
-            @Html.Raw(post.Body)
+            @Html.Raw(WebApplication.Classes.Utils.CutText(post.Body))
         </td>
         <td>
-            @Html.Raw(post.Author.UserName)
+
+            <img src="~/Img/User-icon.png" />@Html.Raw(post.Author.FullName)
         </td>
         <td>
             @Html.Raw(post.Date)
@@ -50,28 +51,28 @@
             @Html.Raw(post.CommentsCount)
         </td>
         <td>
-            
+
             @if (User.Identity.IsAuthenticated &&
-                        users.FirstOrDefault(u => u.UserName == User.Identity.Name).Role == "Admin")
+                            users.FirstOrDefault(u => u.UserName == User.Identity.Name).Role == "Admin")
             {
-                @Html.ActionLink("Edit", "Edit", new { id = post.Id })
+                @Html.ActionLink("Edit", "Edit", new { id = post.Id })<b>&nbsp;&nbsp;&nbsp;&nbsp; &#9998;</b>
                 <br />
-                @Html.ActionLink("Delete", "Delete", new { id = post.Id })
+                @Html.ActionLink("Delete", "Delete", new { id = post.Id })<b>&nbsp; &#9851;</b>
                 <br />
             }
             @if (User.Identity.IsAuthenticated &&
-                users.FirstOrDefault(u => u.UserName == User.Identity.Name).Role != "Admin" &&
-                User.Identity.Name == post.Author.UserName)
+                    users.FirstOrDefault(u => u.UserName == User.Identity.Name).Role != "Admin" &&
+                    User.Identity.Name == post.Author.UserName)
             {
-                @Html.ActionLink("Edit", "Edit", new { id = post.Id })
+                @Html.ActionLink("Edit", "Edit", new { id = post.Id })<b>&nbsp;&nbsp;&nbsp; &#9998;</b>
                 <br />
-                @Html.ActionLink("Delete", "Delete", new { id = post.Id })
+                @Html.ActionLink("Delete", "Delete", new { id = post.Id })<b>&nbsp; &#9851;</b>
                 <br />
             }
-            
-           
+
+
         </td>
     </tr>
-}
+    }
 
 </table>

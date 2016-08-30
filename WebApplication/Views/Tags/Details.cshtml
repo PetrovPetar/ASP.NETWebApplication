@@ -10,7 +10,7 @@
 @if (Model.Posts.Count() > 0)
 {
     <h2>Постове:</h2>
-    <table>
+    <table class="table">
         <tr>
             <th>Име на поста</th>
             <th>Автор на поста</th>
@@ -22,19 +22,20 @@
         {
             <tr>
                 <td>
-                    @Html.ActionLink(post.Title, "Details",
-                                "Posts", new { id = post.Id }, null)
-            </td>
-            <td>@post.Author.UserName</td>
-            <td>@Html.Raw(post.Body)</td>
-            <td>@post.Comments.Count()</td>
-            <td>@post.Date</td>
-        </tr>
+                        @Html.ActionLink(post.Title, "Details",
+                                    "Posts", new { id = post.Id }, null)
+                </td>
+                <td><img src="~/Img/User-icon.png" />@post.Author.UserName</td>
+                <td>@Html.Raw(post.Body)</td>
+                <td>@post.Comments.Count()</td>
+                <td>@post.Date</td>
+            </tr>
         }
     </table>
 }
 
 <p>
-    @Html.ActionLink("Edit", "Edit", new { id = Model.Id }) |
-    @Html.ActionLink("Back to List", "Index")
+    @Html.ActionLink("Редакция", "Edit", new { id = Model.Id }) |
+    @Html.ActionLink("Изтриване", "Delete", new { id = Model.Id }) |
+    @Html.ActionLink("Обратно към списъкът", "Index")
 </p>

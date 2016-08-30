@@ -1,27 +1,44 @@
 ﻿@model WebApplication.Models.IndexViewModel
 @{
     ViewBag.Title = "Manage";
-    List<WebApplication.Models.ApplicationUser> users = ViewBag.Users;
-    WebApplication.Models.ApplicationUser currentUser = users.Single(u => u.UserName == User.Identity.Name);
+    WebApplication.Models.ApplicationUser currentUser = ViewBag.User;
 }
 
 <h2>@currentUser.UserName</h2>
+@using (Html.BeginForm("CreateProfilePic", "Manage", FormMethod.Post, new { enctype = "multipart/form-data" }))
+{
+    @Html.AntiForgeryToken()
+    <div class="img-upload">
+        <h2>Качи снимка</h2>
+        <input type="file" id="file" name="file" />
+        <input type="submit" value="Качи" />
+    </div>
 
+}
+@{
+
+    var path = "~/Gallery/ProfilePics/" + currentUser.ProfilePic;
+    if (path != null)
+    {
+        <img src="@Url.Content(path)" alt="Image" width="200" />
+    }
+
+}
 <p class="text-success">@ViewBag.StatusMessage</p>
 <div>
-    <h4>Change your account settings</h4>
+   
     <hr />
     <dl class="dl-horizontal">
-        <dt>Password:</dt>
+        <dt>Парола:</dt>
         <dd>
             [
             @if (Model.HasPassword)
             {
-                @Html.ActionLink("Change your password", "ChangePassword")
+                @Html.ActionLink("Смяна на паролата", "ChangePassword")
             }
             else
             {
-                @Html.ActionLink("Create", "SetPassword")
+                @Html.ActionLink("Създай", "SetPassword")
             }
             ]
         </dd>
@@ -33,9 +50,17 @@
         <dd>
             @foreach (var post in currentUser.Posts)
             {
-                @post.Title;
+                <div class="post">
+                    @Html.ActionLink(post.Title, "Details",
+         "Posts", new { id = post.Id }, null)
+                    <br />
+                    Коментари: @post.Comments.Count()
+                    <br />
+
+                </div>
+
             }
-            @currentUser.Posts.Count()
+           
         </dd>
         <dt>Коментари:</dt>
         <dd>

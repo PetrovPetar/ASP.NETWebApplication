@@ -7,6 +7,7 @@ using System.Linq;
 using System.Net;
 using System.Web;
 using System.Web.Mvc;
+using WebApplication.Extensions;
 using WebApplication.Models;
 
 namespace WebApplication.Controllers
@@ -49,7 +50,7 @@ namespace WebApplication.Controllers
         public ActionResult Create()
         {
             var currentUser = db.Users.FirstOrDefault(u => u.UserName == User.Identity.Name);
-
+            ViewBag.Posts = db.Posts.ToList();
             if (User.Identity.IsAuthenticated && currentUser.Role == "Admin")
             {
                 return View();
@@ -63,17 +64,19 @@ namespace WebApplication.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         
-        public ActionResult Create([Bind(Include = "Id,Name")] Category category)
+        public ActionResult Create(string name)
         {
             if (ModelState.IsValid)
             {
-
+                Category category = new Category();
+                category.Name = name;
                 db.Categories.Add(category);
                 db.SaveChanges();
+                this.AddNotification("Category is created.", NotificationType.SUCCESS);
                 return RedirectToAction("Index");
             }
-
-            return View(category);
+            this.AddNotification("!", NotificationType.ERROR);
+            return View();
         }
 
         // GET: Categories/Edit/5
@@ -105,25 +108,37 @@ namespace WebApplication.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         
-        public ActionResult Edit([Bind(Include = "Id,Name")] Category category, string [] posts)
+        public ActionResult Edit(string name, string [] posts, int? id)
         {
             if (ModelState.IsValid)
             {
-                foreach (var p in posts)
-                {
-                    var postId = Convert.ToInt32(p);
-                    var currentPost = db.Posts.Find(postId);
-                    category.Posts.Add(currentPost);
-                    var previousCategory = db.Posts.Find(postId).Category;
-                    db.Categories.Find(previousCategory.Id).Posts.Remove(currentPost);
-                    db.Posts.Find(postId).Category = category;
+                var oldCategory = db.Categories.Find(id);
+                var newCategory = oldCategory;
+                newCategory.Name = name;
 
+                if(posts != null)
+                {
+                    foreach (var p in posts)
+                    {
+                        var postId = Convert.ToInt32(p);
+                        var currentPost = db.Posts.Find(postId);
+                        if (!newCategory.Posts.Contains(currentPost))
+                        {
+                            newCategory.Posts.Add(currentPost);
+                            var previousCategory = db.Posts.Find(postId).Category;
+                            db.Categories.Find(previousCategory.Id).Posts.Remove(currentPost);
+                            db.Posts.Find(postId).Category = newCategory;
+                        }
+                    }
                 }
-                db.Entry(category).State = EntityState.Modified;
+              
+                db.Entry(newCategory).State = EntityState.Modified;
                 db.SaveChanges();
+                this.AddNotification("Category is edited!", NotificationType.SUCCESS);
                 return RedirectToAction("Index");
             }
-            return View(category);
+            this.AddNotification("", NotificationType.ERROR);
+            return View();
         }
 
         // GET: Categories/Delete/5
@@ -165,6 +180,7 @@ namespace WebApplication.Controllers
 
             db.Categories.Remove(category);
             db.SaveChanges();
+            this.AddNotification("Category is deleted!", NotificationType.INFO);
             return RedirectToAction("Index");
         }
 

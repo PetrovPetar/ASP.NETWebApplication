@@ -4,12 +4,12 @@
 @{
     ViewBag.Title = "Details";
     List<WebApplication.Models.ApplicationUser> users = ViewBag.Users;
+    var currentUser = users.FirstOrDefault(u => u.UserName == User.Identity.Name);
 }
 
-<h2>Details</h2>
 
 <div>
-    <h4>Category</h4>
+   
     <hr />
    <h1>Категория: @Html.DisplayFor(model => model.Name)</h1>
   
@@ -43,7 +43,8 @@
             <dd>
                 @post.Date
             </dd>
-            @if (post.Author.UserName == User.Identity.Name)
+            @if (post.Author.UserName == User.Identity.Name || 
+                 currentUser.Role == "Admin")
             {
                 <dt>
                     Действия

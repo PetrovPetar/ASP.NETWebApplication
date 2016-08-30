@@ -64,7 +64,7 @@ namespace WebApplication.Controllers
                     var fileName = Path.GetFileName(file.FileName);
                     var path = Path.Combine(Server.MapPath("~/Gallery/"), fileName);
                     file.SaveAs(path);
-
+                    
                     image.Name = fileName;
                     image.Author = db.Users.Single(u => u.UserName == User.Identity.Name);
                     db.Users.Find(image.Author.Id).Images.Add(image);
@@ -81,6 +81,7 @@ namespace WebApplication.Controllers
             return RedirectToAction("Index");
            
         }
+
 
         // GET: Images/Edit/5
        
@@ -114,11 +115,12 @@ namespace WebApplication.Controllers
         public ActionResult DeleteConfirmed(int id)
         {
 
-            Image image = db.Images.Find(id);
+            
+            var image = db.Images.Find(id);
             if(image != null)
             {
                 db.Images.Remove(image);
-                db.Users.Find(image.Author.Id).Images.Remove(image);
+                db.Users.FirstOrDefault(u => u.UserName == User.Identity.Name).Images.Remove(image);
                 db.SaveChanges();
                 this.AddNotification("Изображението е изтрито.", NotificationType.INFO);
                 return RedirectToAction("Index");

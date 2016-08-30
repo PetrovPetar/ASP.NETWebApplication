@@ -11,7 +11,7 @@ namespace WebApplication.Models
     {
         public Category()
         {
-            this.Posts = new HashSet<Post>();
+            Posts = new HashSet<Post>();
         }
         [Key]
         public int Id { get; set; }

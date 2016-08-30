@@ -100,6 +100,10 @@ namespace WebApplication.Controllers
                 post.Category = postCategory;
 
                 db.Users.Find(post.Author.Id).Posts.Add(post);
+                foreach (var userPost in db.Users.Find(post.Author.Id).Posts)
+                {
+                    var p = userPost;
+                }
                 db.Categories.Find(categoryId).Posts.Add(post);
                 db.Posts.Add(post);
                 db.SaveChanges();
@@ -192,7 +196,7 @@ namespace WebApplication.Controllers
             {
                 db.Comments.Remove(comment);
             }
-            foreach (var tag in post.Tags)
+            foreach (var tag in post.Tags.ToList())
             {
                 var tagId = tag.Id;
                 db.Tags.Find(tagId).Posts.Remove(post);

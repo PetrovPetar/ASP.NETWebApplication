@@ -76,6 +76,10 @@ namespace WebApplication.Models
         [Display(Name = "FullName")]
         public string FullName { get; set; }
 
+        [StringLength(500)]
+        [Display(Name = "AboutMe")]
+        public string AboutMe { get; set; }
+
         [Required]
         [StringLength(100, ErrorMessage = "The {0} must be at least {2} characters long.", MinimumLength = 3)]
         [DataType(DataType.Password)]

@@ -2,27 +2,44 @@
 @{
     ViewBag.Title = "Index";
 }
+<img class="col-md-12" src="~/Img/university-header-tertiary-5x1.jpg.rendition.cq5dam.webintel.960.192.jpg" />
 
-<h2>Index</h2>
+<h2>Потребители&nbsp;<img src="~/Img/users-icon.png" /></h2>
 
-<table class="users">
+
+<table class="table">
     <tr>
-        <th>Име</th>
-        <th>Ел.поща</th>
+        <th class="col-md-2">Потребител</th>
+        <th class="col-lg-8">За себе си</th>
+        <th class="col-lg-2">e-mail</th>
     </tr>
     @foreach (var user in Model)
     {
-        <tr>
+        <tr class="users">
             @if (user.FullName != null)
             {
                 <td>@user.FullName</td>
             }
             else
-            { 
+            {
                 <td>Без име</td>
             }
-            
-            <td>@user.UserName</td>
+
+            @if (user.AboutMe != null)
+            {
+                <td>@user.AboutMe</td>
+            }
+            else
+            {
+                <td><b>@user.FullName</b>&nbsp;<i>не е споделил нищо за себе си</i></td>
+            }
+
+            <td><a href="mailto:@user.UserName"><div>@user.UserName&#9993; </div></a></td>
+
+
         </tr>
+
     }
+
 </table>
+<hr />

@@ -7,12 +7,16 @@ using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
 using WebApplication.Models;
+using WebApplication.Extensions;
+using System.IO;
 
 namespace WebApplication.Controllers
 {
     [Authorize]
     public class ManageController : Controller
     {
+        private ApplicationDbContext db = new ApplicationDbContext();
+
         private ApplicationSignInManager _signInManager;
         private ApplicationUserManager _userManager;
 
@@ -49,11 +53,48 @@ namespace WebApplication.Controllers
                 _userManager = value;
             }
         }
+        [Authorize]
+        public ActionResult CreateProfilePic()
+        {
+            ViewBag.CurrentUser = db.Users.Single(u => u.UserName == User.Identity.Name);
+            return View();
+        }
 
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult CreateProfilePic([Bind(Include = "Id")] Image image, HttpPostedFileBase file)
+        {
+            
+            if (User.Identity.IsAuthenticated)
+            {
+                if (file != null && file.ContentLength > 0)
+                {
+                   
+                    var fileName = Path.GetFileName(file.FileName);
+                    var path = Path.Combine(Server.MapPath("~/Gallery/ProfilePics/"), fileName);
+                    file.SaveAs(path);
+
+                    image.Name = fileName;
+                    image.Author = db.Users.Single(u => u.UserName == User.Identity.Name);
+                    db.Users.Find(image.Author.Id).ProfilePic = fileName;
+                    db.SaveChanges();
+                    this.AddNotification("Успешно качихте изображението.", NotificationType.SUCCESS);
+                    return RedirectToAction("Index");
+
+                }
+                this.AddNotification("Не сте избрали снимка.", NotificationType.ERROR);
+                return RedirectToAction("Index");
+            }
+
+            this.AddNotification("Първо трябва да се впишете с потребителски профил.", NotificationType.WARNING);
+            return RedirectToAction("Index");
+
+        }
         //
         // GET: /Manage/Index
         public async Task<ActionResult> Index(ManageMessageId? message)
         {
+            
             ViewBag.StatusMessage =
                 message == ManageMessageId.ChangePasswordSuccess ? "Your password has been changed."
                 : message == ManageMessageId.SetPasswordSuccess ? "Your password has been set."
@@ -62,7 +103,7 @@ namespace WebApplication.Controllers
                 : message == ManageMessageId.AddPhoneSuccess ? "Your phone number was added."
                 : message == ManageMessageId.RemovePhoneSuccess ? "Your phone number was removed."
                 : "";
-
+            ViewBag.User = db.Users.FirstOrDefault(u => u.UserName == User.Identity.Name);
             var userId = User.Identity.GetUserId();
             var model = new IndexViewModel
             {

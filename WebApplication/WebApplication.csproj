@@ -235,8 +235,16 @@
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
     <Content Include="Content\Site.css" />
+    <Content Include="Img\books-icon.png" />
+    <Content Include="Img\graphic-1552416_1280.png" />
+    <Content Include="Img\header_w1170x200_offerings_002.jpg" />
     <Content Include="Img\monkey-clipart-black-and-white-16981-monkey-face-svg.png" />
     <Content Include="Img\monkey_cute_2_line_art.png" />
+    <Content Include="Img\programming-header4.jpg" />
+    <Content Include="Img\project-1287781_960_720.jpg" />
+    <Content Include="Img\university-header-tertiary-5x1.jpg.rendition.cq5dam.webintel.960.192.jpg" />
+    <Content Include="Img\User-icon.png" />
+    <Content Include="Img\users-icon.png" />
     <Content Include="Scripts\ai.0.22.19-build00125.js" />
     <Content Include="Scripts\ai.0.22.19-build00125.min.js" />
     <Content Include="Scripts\bootstrap.js" />
@@ -321,7 +329,7 @@
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Files\" />
-    <Folder Include="Gallery\" />
+    <Folder Include="Gallery\ProfilePics\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff" />

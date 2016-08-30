@@ -6,15 +6,12 @@
     var posts = ViewBag.Posts;
 }
 
-<h2>Create</h2>
-
-
 @using (Html.BeginForm("Create", "Tags", FormMethod.Post)) 
 {
     @Html.AntiForgeryToken()
     
     <div class="form-horizontal">
-        <h4>Post</h4>
+       
         <hr />
         @Html.ValidationSummary(true, "", new { @class = "text-danger" })
         <div class="form-group">

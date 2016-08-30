@@ -1,7 +1,7 @@
 ﻿
 
 @{
-   
+
     ViewBag.Title = "Home Page";
     List<WebApplication.Models.Tag> tags = ViewBag.Tags;
     List<WebApplication.Models.Category> categories = ViewBag.Categories;
@@ -12,59 +12,65 @@
 <div class="admin-post">
     <h3 class="recent-posts" style="text-align:justify"><marquee behavior="slide" direction="left" scrollamount="11">&nbsp;&nbsp;....and monkeys sometimes read</marquee></h3>
 
-
-
     @foreach (var post in Model.OrderByDescending(p => p.Date).Where(a => a.Author.FullName.Equals("Administrator")).Take(1))
     {
 
         <div class="content">
             <blockquote class="title">&nbsp;&nbsp;<h3>@post.Title</h3></blockquote>
-            <blockquote>&nbsp;&nbsp; @Html.Raw(post.Body)</blockquote>
+            <blockquote>&nbsp;&nbsp; @Html.Raw(WebApplication.Classes.Utils.CutText(post.Body, 500))</blockquote>
 
         </div>
     }
 </div>
-<aside class="col-md-4">
-        <div class="tags col-md-4">
-            <h2 class="recent-posts">Популярни тагове</h2>
-            @foreach (var tag in tags.OrderByDescending(t => t.Posts.Count()).Take(5))
+<img class="col-md-12" src="~/Img/programming-header4.jpg" />
+
+<aside class="recent-posts">
+    <ul class="col-md-3" style="display:inline-block">
+        <li class="recent-post-h">Популярни тагове</li>
+        @foreach (var tag in tags.OrderByDescending(t => t.Posts.Count()).Take(5))
             {
-                <h3 class="title">
-                    @Html.ActionLink(tag.Name, "Details",
+            <li class="recent-post-ht">
+                &nbsp;
+                @Html.ActionLink(tag.Name, "Details",
                                 "Tags", new { id = tag.Id }, null)
-            </h3>
-            }
-            <h2 class="recent-posts">Категории</h2>
-            @foreach (var category in categories)
+            </li>
+        }
+        <li class="recent-post-h">Категории</li>
+        @foreach (var category in categories)
             {
-                <h3 class="title">
-                    @Html.ActionLink(category.Name, "Details",
+            <li class="recent-post-ht">
+                &nbsp;
+                @Html.ActionLink(category.Name, "Details",
                                 "Categories", new { id = category.Id }, null)
-                </h3>
-            }
-        </div>
+            </li>
+        }
+    </ul>
 </aside>
 
-<h2 class="recent-posts">Последни статии</h2>
+<h2>Последни статии</h2>
 <hr />
-<article class="col-md-8">
-    @foreach (var post in Model.OrderByDescending(p => p.Date).Where(a => !a.Author.FullName.Equals("Admin")).Take(7))
+<article>
+    @foreach (var post in Model.OrderByDescending(p => p.Date).Where(a => !a.Author.FullName.Equals("Administrator")).Take(6))
     {
-        <h3 class="title">@WebApplication.Classes.Utils.CutText(post.Title)</h3>
+        <h3 class="title">@WebApplication.Classes.Utils.CutText(post.Title, 500)</h3>
 
-        <b><i>Публикувано от </i></b><span>@post.Author.FullName</span><b><i> на </i></b><span>@post.Date</span><br />
-        <div class="content">
 
-            @Html.Raw(WebApplication.Classes.Utils.CutText(post.Body))
-            <p class="btn btn-default">
-                @Html.ActionLink("Прочети повече...", "Details",
+        <b><span><img src="~/Img/User-icon.png" />&nbsp;@post.Author.FullName</span></b><b> | </b><span>@post.Date</span><br />
+
+            <div class="content">
+
+
+                @Html.Raw(WebApplication.Classes.Utils.CutText(post.Body, 450))
+                <br />
+                <button class="btn btn-default">
+                    @Html.ActionLink("Прочети повече...", "Details",
                 "Posts", new { id = post.Id }, null)
-            </p>
+                    <img src="~/Img/books-icon.png" />
+                </button>
 
-        </div>
-        <hr />
+            </div>
+            <br />
+            <hr />
     }
-
-  
 
 </article>

@@ -9,6 +9,7 @@ using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
 using WebApplication.Models;
+using WebApplication.Extensions;
 
 namespace WebApplication.Controllers
 {
@@ -73,7 +74,7 @@ namespace WebApplication.Controllers
             {
                 return View(model);
             }
-
+            this.AddNotification("Влязохте успешно в профилът си.", NotificationType.SUCCESS);
             if (User.IsInRole("Admin"))
             {
                 model.Role = "Admin";
@@ -92,7 +93,7 @@ namespace WebApplication.Controllers
                 case SignInStatus.Failure:
                 default:
                     ModelState.AddModelError("", "Грешен опит.");
-                    
+                   
                     return View(model);
             }
         }
@@ -162,6 +163,7 @@ namespace WebApplication.Controllers
                     UserName = model.Email,
                     Email = model.Email,
                     FullName = model.FullName,
+                    AboutMe = model.AboutMe,
                     Role = "User"
                 };
                 var result = await UserManager.CreateAsync(user, model.Password);
@@ -404,6 +406,7 @@ namespace WebApplication.Controllers
         public ActionResult LogOff()
         {
             AuthenticationManager.SignOut(DefaultAuthenticationTypes.ApplicationCookie);
+            this.AddNotification("Вие излязохте успешно от профилът си.", NotificationType.INFO);
             return RedirectToAction("Index", "Home");
         }
 

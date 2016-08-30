@@ -6,22 +6,20 @@
     WebApplication.Models.ApplicationUser currentUser = users.FirstOrDefault(u => u.UserName == User.Identity.Name);
 }
 
-<h2>Index</h2>
-
 @using (Html.BeginForm("Create", "Images", FormMethod.Post, new { enctype = "multipart/form-data" }))
 {
     @Html.AntiForgeryToken()
     <div class="img-upload">
         <h2>Качи снимка</h2>
         <input type="file" id="file" name="file" />
-        <input type="submit" value="Качи" />
+        <input type="submit" value="Качи"  />
     </div>
    
 }
 <table class="table">
     <tr>
         <th>
-            @Html.DisplayNameFor(model => model.Name)
+            @Html.DisplayName("Име")
         </th>
         
         <th></th>
@@ -49,7 +47,7 @@
                 currentUser.Role == "Admin")
                 {
 
-                    @Html.ActionLink("Delete", "Delete", new { id = image.Id })
+                    @Html.ActionLink("Изтрий", "Delete", new { id = image.Id })
                 }
             }
         </td>

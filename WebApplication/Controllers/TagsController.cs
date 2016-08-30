@@ -98,6 +98,7 @@ namespace WebApplication.Controllers
                 {
                     return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
                 }
+                ViewBag.Posts = db.Posts.ToList();
                 Tag tag = db.Tags.Find(id);
                 if (tag == null)
                 {
@@ -114,15 +115,34 @@ namespace WebApplication.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
        
-        public ActionResult Edit([Bind(Include = "Id,Name")] Tag tag)
+        public ActionResult Edit(string name, string [] post, int? id)
         {
             if (ModelState.IsValid)
             {
-                db.Entry(tag).State = EntityState.Modified;
+                var oldTag = db.Tags.Find(id);
+                foreach (var p in oldTag.Posts.ToList())
+                {
+                    db.Posts.Find(p.Id).Tags.Remove(oldTag);
+                    oldTag.Posts.Remove(p);
+                    
+                }
+                var newTag = oldTag;
+                newTag.Name = name;
+                if (post != null)
+                {
+                    foreach (var p in post)
+                    {
+                        var postId = Convert.ToInt32(p);
+                        newTag.Posts.Add(db.Posts.Single(x => x.Id == postId));
+
+                        db.Posts.Find(postId).Tags.Add(newTag);
+                    }
+                }
+                db.Entry(newTag).State = EntityState.Modified;
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
-            return View(tag);
+            return View();
         }
 
         // GET: Tags/Delete/5
