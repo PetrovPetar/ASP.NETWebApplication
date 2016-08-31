@@ -3,7 +3,7 @@
 
 @{
     ViewBag.Title = "Create";
-    var posts = ViewBag.Posts;
+    List<WebApplication.Models.Post> posts = ViewBag.Posts;
 }
 
 @using (Html.BeginForm("Create", "Tags", FormMethod.Post)) 
@@ -25,7 +25,7 @@
         <div class="form-group">
             @Html.Label("Статии", htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                @foreach (var p in posts)
+                @foreach (var p in posts.OrderBy(ps => ps.Title))
                 {
                     <input type="checkbox" id="post" name="post" value="@p.Id" />
                     @p.Title

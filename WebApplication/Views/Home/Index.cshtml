@@ -1,5 +1,4 @@
 ﻿
-
 @{
 
     ViewBag.Title = "Home Page";
@@ -27,7 +26,7 @@
 <aside class="recent-posts">
     <ul class="col-md-3" style="display:inline-block">
         <li class="recent-post-h">Популярни тагове</li>
-        @foreach (var tag in tags.OrderByDescending(t => t.Posts.Count()).Take(5))
+        @foreach (var tag in tags.OrderByDescending(t => t.Posts.Count()).Take(4))
             {
             <li class="recent-post-ht">
                 &nbsp;
@@ -50,7 +49,7 @@
 <h2>Последни статии</h2>
 <hr />
 <article>
-    @foreach (var post in Model.OrderByDescending(p => p.Date).Where(a => !a.Author.FullName.Equals("Administrator")).Take(6))
+    @foreach (var post in Model.OrderByDescending(p => p.Date).Where(a => !a.Author.FullName.Equals("Administrator")).Take(5))
     {
         <h3 class="title">@WebApplication.Classes.Utils.CutText(post.Title, 500)</h3>
 
@@ -64,7 +63,7 @@
                 <br />
                 <button class="btn btn-default">
                     @Html.ActionLink("Прочети повече...", "Details",
-                "Posts", new { id = post.Id }, null)
+                    "Posts", new { id = post.Id }, null)
                     <img src="~/Img/books-icon.png" />
                 </button>
 

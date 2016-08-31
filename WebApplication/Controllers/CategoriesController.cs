@@ -64,12 +64,11 @@ namespace WebApplication.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         
-        public ActionResult Create(string name)
+        public ActionResult Create([Bind(Include ="Name")] Category category)
         {
             if (ModelState.IsValid)
             {
-                Category category = new Category();
-                category.Name = name;
+               
                 db.Categories.Add(category);
                 db.SaveChanges();
                 this.AddNotification("Category is created.", NotificationType.SUCCESS);

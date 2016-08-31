@@ -40,21 +40,11 @@ table, th, td{
     border:thin;
 }
 .admin-post {
-    margin-top:100px;
     text-align:justify;
     background-color: #EEE;
     border-radius:10px;
-    
 }
-.admin-post>h2>a:hover,
-.admin-post>h3>a:hover{
-   
-    font-weight:bold;
-}
-.admin-post>h2>a, .admin-post>h3>a {
-    text-decoration:none;
-     color:black;
-}
+
 .form-horizontal .control-label{
     font-weight:700;
 }

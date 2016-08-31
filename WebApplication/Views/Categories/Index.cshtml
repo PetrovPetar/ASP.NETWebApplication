@@ -10,6 +10,9 @@
         <th>
             @Html.DisplayName("Име")
         </th>
+        <th>
+            @Html.DisplayName("Постове")
+        </th>
         <th></th>
     </tr>
 
@@ -17,6 +20,9 @@
     <tr>
         <td>
             @Html.DisplayFor(modelItem => item.Name)
+        </td>
+        <td>
+            @item.Posts.Count()
         </td>
         <td>
             @Html.ActionLink("Редакция", "Edit", new { id=item.Id }) |

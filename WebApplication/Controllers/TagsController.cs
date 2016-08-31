@@ -1,14 +1,10 @@
-
-﻿using System;
-using System.Collections.Generic;
-using System.Data;
+using System;
 using System.Data.Entity;
 using System.Linq;
 using System.Net;
 using System.Web;
 using System.Web.Mvc;
-using System.Web.UI;
-using System.Web.UI.HtmlControls;
+using WebApplication.Extensions;
 using WebApplication.Models;
 
 namespace WebApplication.Controllers
@@ -79,9 +75,10 @@ namespace WebApplication.Controllers
                
                 db.Tags.Add(tag);
                 db.SaveChanges();
+                this.AddNotification("Тагът е създаден.", NotificationType.SUCCESS);
                 return RedirectToAction("/Details/"+ tag.Id);
             }
-            
+            this.AddNotification("Грешка. Тагът не се създаде!", NotificationType.ERROR);
             return View(tag);
         }
 
@@ -140,8 +137,10 @@ namespace WebApplication.Controllers
                 }
                 db.Entry(newTag).State = EntityState.Modified;
                 db.SaveChanges();
+                this.AddNotification("Тагът е редактиран", NotificationType.SUCCESS);
                 return RedirectToAction("Index");
             }
+            this.AddNotification("Грешка!", NotificationType.ERROR);
             return View();
         }
 
@@ -183,6 +182,7 @@ namespace WebApplication.Controllers
             }
             db.Tags.Remove(tag);
             db.SaveChanges();
+            this.AddNotification("Тагът е изтрит!", NotificationType.SUCCESS);
             return RedirectToAction("Index");
         }
 

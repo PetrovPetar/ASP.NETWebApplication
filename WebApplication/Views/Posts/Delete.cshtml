@@ -4,7 +4,7 @@
 @{
     ViewBag.Title = "Delete";
 }
-
+<img class="col-md-12" src="~/Img/header_w1170x200_offerings_002.jpg" />
 
 <h3>Сигурни ли сте, че искате да изтриета статията?</h3>
 <div>
@@ -24,7 +24,7 @@
         </dt>
 
         <dd>
-            @Html.DisplayFor(model => model.Body)
+            @Html.Raw(Model.Body)
         </dd>
 
         <dt>

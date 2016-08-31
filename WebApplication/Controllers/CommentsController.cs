@@ -183,7 +183,7 @@ namespace WebApplication.Controllers
     
         public FileResult Download(string ImageName)
         {
-            return File("~/Files/" + ImageName, System.Net.Mime.MediaTypeNames.Application.Octet);
+            return File("~/Files/" + ImageName, System.Net.Mime.MediaTypeNames.Application.Octet, ImageName);
 
         }
         protected override void Dispose(bool disposing)
