@@ -81,3 +81,4 @@ C:\Users\petar\Documents\visual2015\Projects\WebApplication\WebApplication\bin\M
 C:\Users\petar\Documents\visual2015\Projects\WebApplication\WebApplication\bin\Microsoft.Owin.Security.MicrosoftAccount.xml
 C:\Users\petar\Documents\visual2015\Projects\WebApplication\WebApplication\obj\Debug\WebApplication.dll
 C:\Users\petar\Documents\visual2015\Projects\WebApplication\WebApplication\obj\Debug\WebApplication.pdb
+C:\Users\petar\Documents\visual2015\Projects\WebApplication\WebApplication\obj\Debug\WebApplication.csprojResolveAssemblyReference.cache
